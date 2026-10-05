@@ -1,92 +1,55 @@
-#include <math.h>
-#include <iostream>
-#include <time.h>
-#include <sys/time.h>
-#include <stdio.h>
+#include "gaussian.cuh"
 
-// modifiable
-typedef float ft;
-const int chunks = 64;
-const size_t ds = 1024*1024*chunks;
-const int count = 22;
-const int num_gpus = 4;
-
-// not modifiable
-const float sqrt_2PIf = 2.5066282747946493232942230134974f;
-const double sqrt_2PI = 2.5066282747946493232942230134974;
-__device__ float gpdf(float val, float sigma) {
-  return expf(-0.5f * val * val) / (sigma * sqrt_2PIf);
-}
-
-__device__ double gpdf(double val, double sigma) {
-  return exp(-0.5 * val * val) / (sigma * sqrt_2PI);
-}
-
-// compute average gaussian pdf value over a window around each point
-__global__ void gaussian_pdf(const ft * __restrict__ x, ft * __restrict__ y, const ft mean, const ft sigma, const int n) {
-  int idx = threadIdx.x + blockDim.x * blockIdx.x;
-  if (idx < n) {
-    ft in = x[idx] - (count / 2) * 0.01f;
-    ft out = 0;
-    for (int i = 0; i < count; i++) {
-      ft temp = (in - mean) / sigma;
-      out += gpdf(temp, sigma);
-      in += 0.01f;
+struct Job {
+    int device;
+    float *x = nullptr, *y = nullptr;
+    explicit Job(int d, size_t n) : device(d) {
+        CUDA_CHECK(cudaSetDevice(device));
+        CUDA_CHECK(cudaMalloc(&x, n * sizeof(float)));
+        try { CUDA_CHECK(cudaMalloc(&y, n * sizeof(float))); }
+        catch (...) { cudaFree(x); throw; }
     }
-    y[idx] = out / count;
-  }
-}
-
-// error check macro
-#define cudaCheckErrors(msg) \
-  do { \
-    cudaError_t __err = cudaGetLastError(); \
-    if (__err != cudaSuccess) { \
-        fprintf(stderr, "Fatal error: %s (%s at %s:%d)\n", \
-            msg, cudaGetErrorString(__err), \
-            __FILE__, __LINE__); \
-        fprintf(stderr, "*** FAILED - ABORTING\n"); \
-        exit(1); \
-    } \
-  } while (0)
-
-// host-based timing
-#define USECPSEC 1000000ULL
-
-unsigned long long dtime_usec(unsigned long long start) {
-  timeval tv;
-  gettimeofday(&tv, 0);
-  return ((tv.tv_sec*USECPSEC)+tv.tv_usec)-start;
-}
-
-int main() {
-  ft *h_x, *d_x[num_gpus], *d_y[num_gpus];
-  h_x = (ft *)malloc(ds * sizeof(ft));
-
-  for (int i = 0; i < num_gpus; i++) {
-    cudaMalloc(&d_x[i], ds * sizeof(ft));
-    cudaMalloc(&d_y[i], ds * sizeof(ft));
-  }
-  cudaCheckErrors("allocation error");
-
-  for (int i = 0; i < num_gpus; i++) {
-    for (size_t j = 0; j < ds; j++) {
-      h_x[j] = rand() / (ft)RAND_MAX;
+    ~Job() { cudaSetDevice(device); cudaFree(x); cudaFree(y); }
+};
+double benchmark(int devices, size_t n, int repeats) {
+    std::vector<std::unique_ptr<Job>> jobs;
+    std::vector<float> host(n);
+    for (int j = 0; j < 4; ++j) {
+        jobs.emplace_back(new Job(j % devices, n));
+        for (size_t i = 0; i < n; ++i) host[i] = float((i + j) % 4096) / 4096;
+        CUDA_CHECK(cudaMemcpy(jobs.back()->x, host.data(), n * sizeof(float), cudaMemcpyHostToDevice));
     }
-    cudaMemcpy(d_x[i], h_x, ds * sizeof(ft), cudaMemcpyHostToDevice);
-  }
-  cudaCheckErrors("copy error");
-
-  unsigned long long et1 = dtime_usec(0);
-
-  for (int i = 0; i < num_gpus; i++) {
-    gaussian_pdf<<<(ds+255)/256, 256>>>(d_x[i], d_y[i], 0.0, 1.0, ds);
-  }
-  cudaDeviceSynchronize();
-  cudaCheckErrors("execution error");
-
-  et1 = dtime_usec(et1);
-  std::cout << "elapsed time: " << et1/(float)USECPSEC << std::endl;
-
-  return 0;
+    auto launch_all = [&]() {
+        for (const auto& job : jobs) {
+            CUDA_CHECK(cudaSetDevice(job->device));
+            gaussian_pdf<<<unsigned((n + 255) / 256), 256>>>(job->x, job->y, n);
+            CUDA_CHECK(cudaGetLastError());
+        }
+        // cudaDeviceSynchronize only fences the CURRENT device, so fence every GPU.
+        for (int d = 0; d < devices; ++d) {
+            CUDA_CHECK(cudaSetDevice(d)); CUDA_CHECK(cudaDeviceSynchronize());
+        }
+    };
+    launch_all();
+    auto start = Clock::now();
+    for (int r = 0; r < repeats; ++r) launch_all();
+    double ms = elapsed_ms(start) / repeats;
+    for (int j = 0; j < 4; ++j) {
+        CUDA_CHECK(cudaSetDevice(jobs[j]->device));
+        CUDA_CHECK(cudaMemcpy(host.data(), jobs[j]->y, n * sizeof(float), cudaMemcpyDeviceToHost));
+        verify_gaussian(host.data(), n, j);
+    }
+    printf("PASS multi devices=%d jobs=4 n_per_job=%zu repeats=%d compute_wall_ms=%.6f\n", devices, n, repeats, ms);
+    return ms;
 }
+int main(int argc, char** argv) try {
+    Args args(argc, argv, {"n", "repeats"});
+    size_t n = args.number("n", 1024 * 1024, 64ULL * 1024 * 1024);
+    int repeats = int(args.number("repeats", 5, 1000));
+    int devices; CUDA_CHECK(cudaGetDeviceCount(&devices));
+    if (!devices) throw std::runtime_error("no CUDA devices");
+    double single = benchmark(1, n, repeats);
+    if (devices < 4) printf("SKIP four-GPU experiment: requires 4 CUDA GPUs; found %d\n", devices);
+    else printf("four_gpu_speedup=%.3f\n", single / benchmark(4, n, repeats));
+    return 0;
+} catch (const std::exception& e) { fprintf(stderr, "FAIL: %s\n", e.what()); return 1; }

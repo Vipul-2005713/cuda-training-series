@@ -1,0 +1,6 @@
+UTC: 2026-10-05T15:21:51.569642+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw1_matrix_mul.exe 65
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.318904
+
+PASS matrix_mul_naive N=65 repeats=10 kernel_ms=0.064717 GFLOP_s=8.487 checked=4225

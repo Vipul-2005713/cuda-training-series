@@ -1,54 +1,35 @@
-#include <cstdio>
-#include <cstdlib>
-// error checking macro
-#define cudaCheckErrors(msg) \
-    do { \
-        cudaError_t __err = cudaGetLastError(); \
-        if (__err != cudaSuccess) { \
-            fprintf(stderr, "Fatal error: %s (%s at %s:%d)\n", \
-                msg, cudaGetErrorString(__err), \
-                __FILE__, __LINE__); \
-            fprintf(stderr, "*** FAILED - ABORTING\n"); \
-            exit(1); \
-        } \
-    } while (0)
+#include "cuda_utils.cuh"
+#include <memory>
 
-struct list_elem {
-  int key;
-  list_elem *next;
-};
-
-template <typename T>
-void alloc_bytes(T &ptr, size_t num_bytes){
-
-  ptr = (T)malloc(num_bytes);
+struct list_elem { int key; list_elem* next; };
+__host__ __device__ int element(list_elem* list, int index) {
+    for (int i = 0; i < index; ++i) list = list->next;
+    return list->key;
 }
-
-__host__ __device__
-void print_element(list_elem *list, int ele_num){
-  list_elem *elem = list;
-  for (int i = 0; i < ele_num; i++)
-    elem = elem->next;
-  printf("key = %d\n", elem->key);
+__global__ void gpu_read_list(list_elem* list, int* results, int n) {
+    for (int i = 0; i < n; ++i) results[i] = element(list, i);
+    printf("key = %d\n", element(list, 3));
 }
-
-__global__ void gpu_print_element(list_elem *list, int ele_num){
-  print_element(list, ele_num);
-}
-
-const int num_elem = 5;
-const int ele = 3;
-int main(){
-
-  list_elem *list_base, *list;
-  alloc_bytes(list_base, sizeof(list_elem));
-  list = list_base;
-  for (int i = 0; i < num_elem; i++){
-    list->key = i;
-    alloc_bytes(list->next, sizeof(list_elem));
-    list = list->next;}
-  print_element(list_base, ele);
-  gpu_print_element<<<1,1>>>(list_base, ele);
-  cudaDeviceSynchronize();
-  cudaCheckErrors("cuda error!");
-}
+int main() try {
+    const int n = 5;
+    if (!device_info().managedMemory) {
+        printf("SKIP linked_list: device does not support managed memory\n"); return 0;
+    }
+    // The essential homework change is malloc -> cudaMallocManaged for EVERY node.
+    std::vector<std::unique_ptr<CudaBuffer<list_elem>>> nodes;
+    for (int i = 0; i < n; ++i) nodes.emplace_back(new CudaBuffer<list_elem>(1, true));
+    for (int i = 0; i < n; ++i) {
+        nodes[i]->get()->key = i;
+        nodes[i]->get()->next = i + 1 < n ? nodes[i + 1]->get() : nullptr;
+    }
+    CudaBuffer<int> results(n, true);
+    printf("key = %d\n", element(nodes[0]->get(), 3));
+    gpu_read_list<<<1, 1>>>(nodes[0]->get(), results.get(), n);
+    CUDA_CHECK(cudaGetLastError());
+    CUDA_CHECK(cudaDeviceSynchronize()); // CPU access must wait for GPU completion.
+    for (int i = 0; i < n; ++i)
+        if (results.get()[i] != i || element(nodes[0]->get(), i) != i)
+            throw std::runtime_error("linked-list traversal mismatch");
+    printf("PASS linked_list: all %d CPU/GPU keys match\n", n);
+    return 0;
+} catch (const std::exception& e) { fprintf(stderr, "FAIL: %s\n", e.what()); return 1; }

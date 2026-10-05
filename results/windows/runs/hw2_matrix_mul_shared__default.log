@@ -1,0 +1,6 @@
+UTC: 2026-10-05T15:21:32.119082+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw2_matrix_mul_shared.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.533579
+
+PASS matrix_mul_shared N=512 repeats=10 kernel_ms=0.552755 GFLOP_s=485.632 checked=262144

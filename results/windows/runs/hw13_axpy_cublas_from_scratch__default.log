@@ -1,0 +1,12 @@
+UTC: 2026-10-05T15:21:49.592944+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw13_axpy_cublas_from_scratch.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.698956
+
+direct_cublas PASS all_elements=65536 max_abs_error=0
+cublas_child_graph PASS all_elements=65536 max_abs_error=0
+N=65536 repetitions=100 exact_recurrence=y0+repetitions*(5*x+2)
+parent_graph_nodes=3 child_graph_nodes=1 creation_ms=0.260900 instantiate_ms=0.397200
+direct_cublas total_wall_ms=13.699600 total_gpu_event_ms=13.608544 wall_us_per_iteration=136.996000
+cublas_child_graph total_wall_ms=7.377000 total_gpu_event_ms=7.090176 wall_us_per_iteration=73.770000
+wall_speedup=1.857069 graph_setup_plus_replay_ms=8.035100

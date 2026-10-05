@@ -1,0 +1,7 @@
+UTC: 2026-10-05T15:21:53.714918+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw3_vector_add.exe 1003 3 128 3
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.334046
+
+device=NVIDIA GeForce RTX 3050 Laptop GPU SMs=16 max_threads_per_SM=1536
+PASS grid_stride_vadd N=1003 blocks=3 threads=128 repeats=3 kernel_ms=0.018773 effective_GB_s=0.641 checked=1003

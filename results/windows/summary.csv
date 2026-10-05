@@ -1,0 +1,90 @@
+target,case,status,exit_code,process_wall_seconds,log,arguments
+device_info,default,PASS,0,0.550582,results/windows/runs/device_info__default.log,[]
+hw1_hello,default,PASS,0,0.532086,results/windows/runs/hw1_hello__default.log,[]
+hw1_vector_add,default,PASS,0,0.568692,results/windows/runs/hw1_vector_add__default.log,[]
+hw1_matrix_mul,default,PASS,0,0.54483,results/windows/runs/hw1_matrix_mul__default.log,[]
+hw2_stencil,default,PASS,0,0.557846,results/windows/runs/hw2_stencil__default.log,[]
+hw2_matrix_mul_shared,default,PASS,0,0.533579,results/windows/runs/hw2_matrix_mul_shared__default.log,[]
+hw3_vector_add,default,PASS,0,0.549295,results/windows/runs/hw3_vector_add__default.log,[]
+hw4_matrix_sums,default,PASS,0,0.565744,results/windows/runs/hw4_matrix_sums__default.log,[]
+hw5_reductions,default,PASS,0,0.602912,results/windows/runs/hw5_reductions__default.log,[]
+hw5_max_reduction,default,PASS,0,0.597607,results/windows/runs/hw5_max_reduction__default.log,[]
+hw5_matrix_sums,default,PASS,0,0.553122,results/windows/runs/hw5_matrix_sums__default.log,[]
+hw6_linked_list,default,PASS,0,0.860571,results/windows/runs/hw6_linked_list__default.log,[]
+hw6_array_inc,default,PASS_WITH_SKIPS,0,1.252592,results/windows/runs/hw6_array_inc__default.log,[]
+hw7_overlap,default,PASS,0,1.038109,results/windows/runs/hw7_overlap__default.log,[]
+hw7_multi,default,PASS_WITH_SKIPS,0,0.580063,results/windows/runs/hw7_multi__default.log,[]
+hw8_task1,default,PASS,0,0.811974,results/windows/runs/hw8_task1__default.log,[]
+hw8_task2,default,PASS,0,0.721886,results/windows/runs/hw8_task2__default.log,[]
+hw8_task3,default,PASS,0,0.712826,results/windows/runs/hw8_task3__default.log,[]
+hw9_groups,default,FAIL,125,0,results/windows/runs/hw9_groups__default.log,[]
+hw9_compaction,default,FAIL,125,0,results/windows/runs/hw9_compaction__default.log,[]
+hw10_serial,default,PASS,0,0.780479,results/windows/runs/hw10_serial__default.log,[]
+hw10_streams,default,PASS,0,0.754512,results/windows/runs/hw10_streams__default.log,[]
+hw10_openmp,default,PASS,0,0.78879,results/windows/runs/hw10_openmp__default.log,[]
+hw11_process,default,PASS,0,0.52242,results/windows/runs/hw11_process__default.log,[]
+hw12_matrix,default,PASS,0,0.454471,results/windows/runs/hw12_matrix__default.log,[]
+hw12_transform,default,PASS,0,0.442902,results/windows/runs/hw12_transform__default.log,[]
+hw13_axpy_stream_capture_with_fixme,default,PASS,0,0.512054,results/windows/runs/hw13_axpy_stream_capture_with_fixme__default.log,[]
+hw13_axpy_stream_capture_from_scratch,default,PASS,0,0.490116,results/windows/runs/hw13_axpy_stream_capture_from_scratch__default.log,[]
+hw13_axpy_stream_capture_timer,default,PASS,0,0.497189,results/windows/runs/hw13_axpy_stream_capture_timer__default.log,[]
+hw13_axpy_cublas_with_fixme,default,PASS,0,2.780406,results/windows/runs/hw13_axpy_cublas_with_fixme__default.log,[]
+hw13_axpy_cublas_from_scratch,default,PASS,0,0.698956,results/windows/runs/hw13_axpy_cublas_from_scratch__default.log,[]
+hw1_vector_add,edge_1,PASS,0,0.276264,results/windows/runs/hw1_vector_add__edge_1.log,['1']
+hw1_vector_add,edge_2,PASS,0,0.31541,results/windows/runs/hw1_vector_add__edge_2.log,['1003']
+hw1_matrix_mul,edge_1,PASS,0,0.353982,results/windows/runs/hw1_matrix_mul__edge_1.log,['1']
+hw1_matrix_mul,edge_2,PASS,0,0.316186,results/windows/runs/hw1_matrix_mul__edge_2.log,['17']
+hw1_matrix_mul,edge_3,PASS,0,0.318904,results/windows/runs/hw1_matrix_mul__edge_3.log,['65']
+hw2_matrix_mul_shared,edge_1,PASS,0,0.31125,results/windows/runs/hw2_matrix_mul_shared__edge_1.log,['1']
+hw2_matrix_mul_shared,edge_2,PASS,0,0.302008,results/windows/runs/hw2_matrix_mul_shared__edge_2.log,['17']
+hw2_matrix_mul_shared,edge_3,PASS,0,0.342372,results/windows/runs/hw2_matrix_mul_shared__edge_3.log,['65']
+hw2_stencil,edge_1,PASS,0,0.312575,results/windows/runs/hw2_stencil__edge_1.log,['1']
+hw2_stencil,edge_2,PASS,0,0.264997,results/windows/runs/hw2_stencil__edge_2.log,['19']
+hw2_stencil,edge_3,PASS,0,0.281269,results/windows/runs/hw2_stencil__edge_3.log,['4099']
+hw3_vector_add,edge_1,PASS,0,0.334046,results/windows/runs/hw3_vector_add__edge_1.log,"['1003', '3', '128', '3']"
+hw4_matrix_sums,edge_1,PASS,0,0.350544,results/windows/runs/hw4_matrix_sums__edge_1.log,['1']
+hw4_matrix_sums,edge_2,PASS,0,0.31906,results/windows/runs/hw4_matrix_sums__edge_2.log,['33']
+hw4_matrix_sums,edge_3,PASS,0,0.321731,results/windows/runs/hw4_matrix_sums__edge_3.log,['257']
+hw5_matrix_sums,edge_1,PASS,0,0.272756,results/windows/runs/hw5_matrix_sums__edge_1.log,['1']
+hw5_matrix_sums,edge_2,PASS,0,0.261303,results/windows/runs/hw5_matrix_sums__edge_2.log,['33']
+hw5_matrix_sums,edge_3,PASS,0,0.315548,results/windows/runs/hw5_matrix_sums__edge_3.log,['257']
+hw5_max_reduction,edge_1,PASS,0,0.302845,results/windows/runs/hw5_max_reduction__edge_1.log,['1']
+hw5_max_reduction,edge_2,PASS,0,0.279184,results/windows/runs/hw5_max_reduction__edge_2.log,['1003']
+hw5_reductions,edge_1,PASS,0,0.299436,results/windows/runs/hw5_reductions__edge_1.log,['1003']
+hw6_array_inc,edge_1,PASS_WITH_SKIPS,0,0.612971,results/windows/runs/hw6_array_inc__edge_1.log,"['--n', '1003', '--iterations', '3']"
+hw7_overlap,edge_1,PASS,0,0.342862,results/windows/runs/hw7_overlap__edge_1.log,"['--n', '1003', '--chunks', '7', '--streams', '3', '--repeats', '2']"
+hw7_multi,edge_1,PASS_WITH_SKIPS,0,0.314609,results/windows/runs/hw7_multi__edge_1.log,"['--n', '1003', '--repeats', '2']"
+hw8_task1,edge_1,PASS,0,0.267763,results/windows/runs/hw8_task1__edge_1.log,"['--size', '33', '--iterations', '3']"
+hw8_task1,edge_2,PASS,0,0.280382,results/windows/runs/hw8_task1__edge_2.log,"['--size', '1031', '--iterations', '5']"
+hw8_task2,edge_1,PASS,0,0.313197,results/windows/runs/hw8_task2__edge_1.log,"['--size', '33', '--iterations', '3']"
+hw8_task2,edge_2,PASS,0,0.349269,results/windows/runs/hw8_task2__edge_2.log,"['--size', '1031', '--iterations', '5']"
+hw8_task3,edge_1,PASS,0,0.322898,results/windows/runs/hw8_task3__edge_1.log,"['--size', '33', '--iterations', '3']"
+hw8_task3,edge_2,PASS,0,0.364782,results/windows/runs/hw8_task3__edge_2.log,"['--size', '1031', '--iterations', '5']"
+hw9_compaction,edge_1,FAIL,125,0,results/windows/runs/hw9_compaction__edge_1.log,"['--n', '1']"
+hw9_compaction,edge_2,FAIL,125,0,results/windows/runs/hw9_compaction__edge_2.log,"['--n', '1003']"
+hw10_serial,edge_1,PASS,0,0.322705,results/windows/runs/hw10_serial__edge_1.log,"['1003', '7', '3', '1']"
+hw10_streams,edge_1,PASS,0,0.305612,results/windows/runs/hw10_streams__edge_1.log,"['1003', '7', '3', '1']"
+hw10_openmp,edge_1,PASS,0,0.320619,results/windows/runs/hw10_openmp__edge_1.log,"['1003', '7', '3', '1']"
+hw12_matrix,edge_1,PASS,0,0.281972,results/windows/runs/hw12_matrix__edge_1.log,['32']
+hw12_matrix,edge_2,PASS,0,0.32749,results/windows/runs/hw12_matrix__edge_2.log,['65']
+hw12_transform,edge_1,PASS,0,0.272725,results/windows/runs/hw12_transform__edge_1.log,['1']
+hw12_transform,edge_2,PASS,0,0.308485,results/windows/runs/hw12_transform__edge_2.log,['1003']
+hw13_axpy_stream_capture_with_fixme,edge_1,PASS,0,0.329844,results/windows/runs/hw13_axpy_stream_capture_with_fixme__edge_1.log,"['1003', '7']"
+hw13_axpy_stream_capture_from_scratch,edge_1,PASS,0,0.355423,results/windows/runs/hw13_axpy_stream_capture_from_scratch__edge_1.log,"['1003', '7']"
+hw13_axpy_stream_capture_timer,edge_1,PASS,0,0.352354,results/windows/runs/hw13_axpy_stream_capture_timer__edge_1.log,"['1003', '7']"
+hw13_axpy_cublas_with_fixme,edge_1,PASS,0,0.615591,results/windows/runs/hw13_axpy_cublas_with_fixme__edge_1.log,"['1003', '7']"
+hw13_axpy_cublas_from_scratch,edge_1,PASS,0,0.596928,results/windows/runs/hw13_axpy_cublas_from_scratch__edge_1.log,"['1003', '7']"
+hw3_vector_add,launch_1x1,PASS,0,0.376521,results/windows/runs/hw3_vector_add__launch_1x1.log,"['262144', '1', '1', '3']"
+hw3_vector_add,launch_1x1024,PASS,0,0.303493,results/windows/runs/hw3_vector_add__launch_1x1024.log,"['262144', '1', '1024', '10']"
+hw3_vector_add,launch_1x256,PASS,0,0.280456,results/windows/runs/hw3_vector_add__launch_1x256.log,"['262144', '1', '256', '10']"
+hw3_vector_add,launch_32x256,PASS,0,0.329023,results/windows/runs/hw3_vector_add__launch_32x256.log,"['262144', '32', '256', '10']"
+hw3_vector_add,launch_160x256,PASS,0,0.282859,results/windows/runs/hw3_vector_add__launch_160x256.log,"['262144', '160', '256', '10']"
+hw3_vector_add,launch_160x1024,PASS,0,0.265318,results/windows/runs/hw3_vector_add__launch_160x1024.log,"['262144', '160', '1024', '10']"
+hw3_vector_add,large_vector,PASS,0,0.642621,results/windows/runs/hw3_vector_add__large_vector.log,"['16777216', '160', '256', '10']"
+hw5_reductions,small,PASS,0,0.326652,results/windows/runs/hw5_reductions__small.log,"['163840', '3']"
+hw5_reductions,precision_32M,PASS,0,0.701791,results/windows/runs/hw5_reductions__precision_32M.log,"['33554432', '3']"
+hw6_array_inc,repeated_10000,PASS_WITH_SKIPS,0,1.052372,results/windows/runs/hw6_array_inc__repeated_10000.log,"['--n', '262144', '--iterations', '10000']"
+hw7_overlap,one_stream,PASS,0,0.614001,results/windows/runs/hw7_overlap__one_stream.log,"['--streams', '1']"
+hw7_overlap,eight_streams,PASS,0,0.590543,results/windows/runs/hw7_overlap__eight_streams.log,"['--streams', '8']"
+hw9_compaction,large,FAIL,125,0,results/windows/runs/hw9_compaction__large.log,"['--n', '1048576', '--iterations', '3']"
+hw10_openmp,four_gpu_bonus,PASS,0,0.600297,results/windows/runs/hw10_openmp__four_gpu_bonus.log,"['1048576', '16', '4', '4']"

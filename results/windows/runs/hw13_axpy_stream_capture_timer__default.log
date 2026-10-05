@@ -1,0 +1,8 @@
+UTC: 2026-10-05T15:21:46.306955+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw13_axpy_stream_capture_timer.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.497189
+
+direct_streams PASS all_elements=65536 max_abs_error=0
+N=65536 repetitions=100 exact_recurrence=y0+8*repetitions*x
+direct_streams total_wall_ms=14.687400 total_gpu_event_ms=14.661760 wall_us_per_iteration=146.874000

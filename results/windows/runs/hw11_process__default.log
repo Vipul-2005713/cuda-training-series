@@ -1,0 +1,6 @@
+UTC: 2026-10-05T15:21:43.876212+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw11_process.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.522420
+
+rank=0 ranks=1 N_total=1048576 N_local=1048576 reps=100 elapsed_ms=11.943800 wall_ms_per_kernel=0.119438 effective_local_GB_s=140.467992 PASS

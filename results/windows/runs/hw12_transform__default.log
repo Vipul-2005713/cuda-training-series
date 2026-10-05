@@ -1,0 +1,6 @@
+UTC: 2026-10-05T15:21:44.855785+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw12_transform.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.442902
+
+terms=1048576 estimate=0.693146703723012 cpu_reference=0.693146703723081 log2=0.693147180559945 cpu_abs_error=6.90558721e-14 truncation_bound=9.53673407e-07 kernel_ms=0.484160 PASS

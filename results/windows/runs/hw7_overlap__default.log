@@ -1,0 +1,7 @@
+UTC: 2026-10-05T15:21:37.653798+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw7_overlap.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 1.038109
+
+PASS overlap n=8388608 chunks=32 streams=8 repeats=5 asyncEngineCount=1
+sequential_ms=10.359840 streams_ms=20.784360 speedup=0.498 (host wall clock; H2D+kernel+D2H included)

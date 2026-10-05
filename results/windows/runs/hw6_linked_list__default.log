@@ -1,0 +1,8 @@
+UTC: 2026-10-05T15:21:35.537076+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw6_linked_list.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.860571
+
+key = 3
+key = 3
+PASS linked_list: all 5 CPU/GPU keys match

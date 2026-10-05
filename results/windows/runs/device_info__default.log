@@ -1,0 +1,10 @@
+UTC: 2026-10-05T15:21:29.349769+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\device_info.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.550582
+
+driver_api_version=13010 runtime_version=13010 device_count=1
+device=0 name=NVIDIA GeForce RTX 3050 Laptop GPU compute_capability=8.6 SMs=16
+total_memory_MiB=4095.5 free_memory_MiB=3299.7 max_threads_per_block=1024 max_threads_per_SM=1536
+managed_memory=1 concurrent_managed_access=0 pageable_memory_access=0 cooperative_launch=1
+concurrent_kernels=1 async_engines=1 memory_bus_width_bits=128

@@ -1,0 +1,12 @@
+UTC: 2026-10-05T15:21:45.301929+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw13_axpy_stream_capture_with_fixme.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.512054
+
+direct_streams PASS all_elements=65536 max_abs_error=0
+N=65536 repetitions=100 exact_recurrence=y0+8*repetitions*x
+direct_streams total_wall_ms=10.854300 total_gpu_event_ms=10.742528 wall_us_per_iteration=108.543000
+captured_graph PASS all_elements=65536 max_abs_error=0
+graph_nodes=4 capture_ms=6.446200 instantiate_ms=2.684200
+captured_graph total_wall_ms=2.315000 total_gpu_event_ms=2.279616 wall_us_per_iteration=23.150000
+wall_speedup=4.688683 graph_setup_plus_replay_ms=11.445400

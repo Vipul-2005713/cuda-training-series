@@ -1,0 +1,8 @@
+UTC: 2026-10-05T15:21:55.330838+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw5_matrix_sums.exe 33
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.261303
+
+PASS row_sums_naive N=33 repeats=10 kernel_ms=0.022509 effective_GB_s=0.199 checked=33
+PASS row_sums_block N=33 repeats=10 kernel_ms=0.020806 effective_GB_s=0.216 checked=33
+PASS column_sums N=33 repeats=10 kernel_ms=0.020979 effective_GB_s=0.214 checked=33

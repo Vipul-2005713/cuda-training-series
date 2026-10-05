@@ -1,0 +1,11 @@
+UTC: 2026-10-05T15:22:10.244306+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw10_openmp.exe 1048576 16 4 4
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.600297
+
+N=1048576 chunks=16 streams_per_gpu=4 requested_gpus=4 available_gpus=1 used_gpus=1
+MULTI_GPU_LIMITATION: only 1 GPU(s); executing the same device-aware path on available hardware.
+serial_end_to_end_ms=1.136400 CPU_max_abs_error=8.94069672e-08
+OpenMP=enabled max_threads=4
+streamed_end_to_end_ms=2.412400 speedup=0.4711 max_abs_error=0
+PASS: all 1048576 elements checked

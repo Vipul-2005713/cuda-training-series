@@ -1,0 +1,9 @@
+UTC: 2026-10-05T15:22:07.272106+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw5_reductions.exe 33554432 3
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.701791
+
+PASS_EXPECTED_FP32_SATURATION atomic_red N=33554432 repeats=3 kernel_ms=60.564770 input_GB_s=2.216 result=16777216 exact=33554432 absolute_error=16777216
+PASS reduce_a N=33554432 repeats=3 kernel_ms=0.806912 input_GB_s=166.335 result=33554432 exact=33554432 absolute_error=0
+PASS reduce_ws N=33554432 repeats=3 kernel_ms=0.805195 input_GB_s=166.690 result=33554432 exact=33554432 absolute_error=0
+PASS reduce_ws_double_finish N=33554432 kernel_ms=0.803840 input_GB_s=166.971 result=33554432 exact=33554432

@@ -1,0 +1,8 @@
+UTC: 2026-10-05T15:22:06.941988+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw5_reductions.exe 163840 3
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.326652
+
+PASS atomic_red N=163840 repeats=3 kernel_ms=0.366251 input_GB_s=1.789 result=163840 exact=163840 absolute_error=0
+PASS reduce_a N=163840 repeats=3 kernel_ms=0.043008 input_GB_s=15.238 result=163840 exact=163840 absolute_error=0
+PASS reduce_ws N=163840 repeats=3 kernel_ms=0.035189 input_GB_s=18.624 result=163840 exact=163840 absolute_error=0

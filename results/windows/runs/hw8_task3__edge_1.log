@@ -1,0 +1,7 @@
+UTC: 2026-10-05T15:21:59.318350+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw8_task3.exe --size 33 --iterations 3
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.322898
+
+PASS transpose variant=shared_padded size=33 iterations=3 cpu_ms=0.001900 kernel_ms=0.026965 effective_GBps=0.646
+D2D_copy_ms=0.016384 D2D_effective_GBps=1.063 transpose_to_copy_ratio=0.608

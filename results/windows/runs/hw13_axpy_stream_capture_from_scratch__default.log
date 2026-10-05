@@ -1,0 +1,12 @@
+UTC: 2026-10-05T15:21:45.815076+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw13_axpy_stream_capture_from_scratch.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.490116
+
+direct_streams PASS all_elements=65536 max_abs_error=0
+N=65536 repetitions=100 exact_recurrence=y0+8*repetitions*x
+direct_streams total_wall_ms=16.953100 total_gpu_event_ms=16.902336 wall_us_per_iteration=169.531000
+captured_graph PASS all_elements=65536 max_abs_error=0
+graph_nodes=4 capture_ms=0.110500 instantiate_ms=0.136700
+captured_graph total_wall_ms=1.997800 total_gpu_event_ms=1.973888 wall_us_per_iteration=19.978000
+wall_speedup=8.485884 graph_setup_plus_replay_ms=2.245000

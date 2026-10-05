@@ -1,0 +1,7 @@
+UTC: 2026-10-05T15:21:30.439422+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw1_vector_add.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.568692
+
+A[0]=-6.25 B[0]=-4.5 C[0]=-10.75
+PASS vector_add N=1048576 repeats=20 kernel_ms=0.080576 effective_GB_s=156.162 checked=1048576

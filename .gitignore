@@ -1,0 +1,18 @@
+# Reproducible generated binaries and temporary analysis files
+build/
+tmp/
+*.exe
+*.obj
+*.exp
+*.lib
+*.pdb
+*.ilk
+*.cubin
+*.ptx
+*.fatbin
+*.ncu-rep
+*.nsys-rep
+*.qdrep
+*.sqlite
+__pycache__/
+

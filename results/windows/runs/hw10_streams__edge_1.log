@@ -1,0 +1,10 @@
+UTC: 2026-10-05T15:22:00.333452+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw10_streams.exe 1003 7 3 1
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.305612
+
+N=1003 chunks=7 streams_per_gpu=3 requested_gpus=1 available_gpus=1 used_gpus=1
+serial_end_to_end_ms=0.285400 CPU_max_abs_error=8.94069672e-08
+OpenMP=disabled
+streamed_end_to_end_ms=0.603800 speedup=0.4727 max_abs_error=0
+PASS: all 1003 elements checked

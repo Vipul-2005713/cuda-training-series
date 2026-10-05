@@ -1,155 +1,59 @@
-#include <iostream>
-// Thread block size
+#include <cuda_runtime.h>
+#include <algorithm>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
 #define BLOCK_SIZE 32
-
-// Matrices are stored in row-major order:
-// M(row, col) = *(M.elements + row * M.stride + col)
-typedef struct {
-    int width;
-    int height;
-    int stride;
-    float* elements;
-} Matrix;
-
-// Get a matrix element
-__device__ float GetElement(const Matrix A, int row, int col)
-{
-    return A.elements[row * A.stride + col];
+#define CUDA(call) do { cudaError_t e=(call); if(e!=cudaSuccess) { fprintf(stderr,"%s:%d: %s: %s\n",__FILE__,__LINE__,#call,cudaGetErrorString(e)); std::exit(1); } } while(0)
+struct Matrix { int width,height,stride; float* elements; };
+__global__ void MatMulKernel(Matrix A,Matrix B,Matrix C) {
+  int row=blockIdx.y*BLOCK_SIZE+threadIdx.y, col=blockIdx.x*BLOCK_SIZE+threadIdx.x;
+  int ty=threadIdx.y, tx=threadIdx.x;
+  __shared__ float As[BLOCK_SIZE][BLOCK_SIZE],Bs[BLOCK_SIZE][BLOCK_SIZE];
+  float value=0;
+  for(int tile=0;tile<(A.width+BLOCK_SIZE-1)/BLOCK_SIZE;++tile) {
+    int ac=tile*BLOCK_SIZE+tx, br=tile*BLOCK_SIZE+ty;
+    As[ty][tx]=(row<A.height && ac<A.width)?A.elements[row*A.stride+ac]:0;
+    Bs[ty][tx]=(br<B.height && col<B.width)?B.elements[br*B.stride+col]:0;
+    __syncthreads(); // Producer writes must finish before other warps consume this tile.
+#ifdef DEMO_BOUNDS_BUG
+    for(int e=0;e<=BLOCK_SIZE;++e) // Opt-in reproducer of the original off-by-one bug.
+#else
+    for(int e=0;e<BLOCK_SIZE;++e)
+#endif
+      value+=As[ty][e]*Bs[e][tx];
+#ifndef DEMO_RACE_BUG
+    __syncthreads(); // All readers finish before the next iteration overwrites shared memory.
+#endif
+  }
+  if(row<C.height && col<C.width) C.elements[row*C.stride+col]=value;
 }
-
-// Set a matrix element
-__device__ void SetElement(Matrix A, int row, int col,
-                           float value)
-{
-    A.elements[row * A.stride + col] = value;
-}
-
-// Get the BLOCK_SIZExBLOCK_SIZE sub-matrix Asub of A that is
-// located col sub-matrices to the right and row sub-matrices down
-// from the upper-left corner of A
- __device__ Matrix GetSubMatrix(Matrix A, int row, int col)
-{
-    Matrix Asub;
-    Asub.width    = BLOCK_SIZE;
-    Asub.height   = BLOCK_SIZE;
-    Asub.stride   = A.stride;
-    Asub.elements = &A.elements[A.stride * BLOCK_SIZE * row
-                                         + BLOCK_SIZE * col];
-    return Asub;
-}
-
-
-// Forward declaration of the matrix multiplication kernel
-__global__ void MatMulKernel(const Matrix, const Matrix, Matrix);
-
-// Matrix multiplication - Host code
-// Matrix dimensions are assumed to be multiples of BLOCK_SIZE
-void MatMul(const Matrix A, const Matrix B, Matrix C)
-{
-    // Load A and B to device memory
-    Matrix d_A;
-    d_A.width = d_A.stride = A.width; d_A.height = A.height;
-    size_t size = A.width * A.height * sizeof(float);
-    cudaMalloc(&d_A.elements, size);
-    cudaMemcpy(d_A.elements, A.elements, size,
-               cudaMemcpyHostToDevice);
-    Matrix d_B;
-    d_B.width = d_B.stride = B.width; d_B.height = B.height;
-    size = B.width * B.height * sizeof(float);
-    cudaMalloc(&d_B.elements, size);
-    cudaMemcpy(d_B.elements, B.elements, size,
-    cudaMemcpyHostToDevice);
-
-    // Allocate C in device memory
-    Matrix d_C;
-    d_C.width = d_C.stride = C.width; d_C.height = C.height;
-    size = C.width * C.height * sizeof(float);
-    cudaMalloc(&d_C.elements, size);
-
-    // Invoke kernel
-    dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
-    dim3 dimGrid(B.width / dimBlock.x, A.height / dimBlock.y);
-    MatMulKernel<<<dimGrid, dimBlock>>>(d_A, d_B, d_C);
-
-    // Read C from device memory
-    cudaMemcpy(C.elements, d_C.elements, size,
-               cudaMemcpyDeviceToHost);
-
-    // Free device memory
-    cudaFree(d_A.elements);
-    cudaFree(d_B.elements);
-    cudaFree(d_C.elements);
-}
-
-// Matrix multiplication kernel called by MatMul()
- __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C)
-{
-    // Block row and column
-    int blockRow = blockIdx.y;
-    int blockCol = blockIdx.x;
-
-    // Each thread block computes one sub-matrix Csub of C
-    Matrix Csub = GetSubMatrix(C, blockRow, blockCol);
-
-    // Each thread computes one element of Csub
-    // by accumulating results into Cvalue
-    float Cvalue = 0;
-
-    // Thread row and column within Csub
-    int row = threadIdx.y;
-    int col = threadIdx.x;
-
-    // Loop over all the sub-matrices of A and B that are
-    // required to compute Csub
-    // Multiply each pair of sub-matrices together
-    // and accumulate the results
-    for (int m = 0; m < (A.width / BLOCK_SIZE); ++m) {
-
-        // Get sub-matrix Asub of A
-        Matrix Asub = GetSubMatrix(A, blockRow, m);
-
-        // Get sub-matrix Bsub of B
-        Matrix Bsub = GetSubMatrix(B, m, blockCol);
-
-        // Shared memory used to store Asub and Bsub respectively
-        __shared__ float As[BLOCK_SIZE][BLOCK_SIZE];
-        __shared__ float Bs[BLOCK_SIZE][BLOCK_SIZE];
-
-        // Load Asub and Bsub from device memory to shared memory
-        // Each thread loads one element of each sub-matrix
-        As[row][col] = GetElement(Asub, row, col);
-        Bs[row][col] = GetElement(Bsub, row, col);
-
-        // Synchronize to make sure the sub-matrices are loaded
-        // before starting the computation
-        __syncthreads();
-        // Multiply Asub and Bsub together
-        for (int e = 0; e <= BLOCK_SIZE; ++e)
-            Cvalue += As[row][e] * Bs[e][col];
-
-    }
-
-    // Write Csub to device memory
-    // Each thread writes one element
-    SetElement(Csub, row, col, Cvalue);
-}
-
-int main(){
-    const int num_m = 3;  // we need 3 matrices
-    const int side_dim = 128;  // side dimension of square matrix
-    Matrix *m = new Matrix[num_m]; // allocate matrix storage part 1
-    for (int i = 0; i < num_m; i++){
-        m[i].width = m[i].height = m[i].stride = side_dim; // set matrix params
-        m[i].elements = new float[side_dim*side_dim];      // allocate matrix storage part 2
-        if (i < 2)                                         // initialize first two matrices
-            for (int j = 0; j < side_dim*side_dim; j++) m[i].elements[j] = 1.0f; }
-    MatMul(m[0], m[1], m[2]);  // perform matrix-multiply
-    std::cout << cudaGetErrorString(cudaGetLastError()) << std::endl;
-    for (int i = 0; i < side_dim*side_dim; i++) // perform results checking
-        if (m[2].elements[i] != (float)side_dim) {std::cout << "Mismatch at index: " << i << " expected: " << (float)side_dim << " got: " << m[2].elements[i] << std::endl; return 0;}
-    std::cout << "Success!" << std::endl;
-    for (int i = 0; i < num_m; i++)
-        delete[] m[i].elements;
-    delete[] m;
-    return 0;
+int main(int argc,char** argv) {
+  int n=128;
+  if(argc>1) { char* end=nullptr; long v=std::strtol(argv[1],&end,10); if(!*argv[1] || *end || v<1 || v>4096) { std::fprintf(stderr,"side must be in [1,4096]\n"); return 2; } n=int(v); }
+  size_t count=size_t(n)*n,bytes=count*sizeof(float);
+  std::vector<float> a(count),b(count),c(count);
+  for(size_t i=0;i<count;++i) { a[i]=float(int(i%7)-3)*0.25f; b[i]=float(int(i%11)-5)*0.125f; }
+  Matrix A{n,n,n,nullptr},B{n,n,n,nullptr},C{n,n,n,nullptr};
+  CUDA(cudaMalloc(&A.elements,bytes)); CUDA(cudaMalloc(&B.elements,bytes)); CUDA(cudaMalloc(&C.elements,bytes));
+  CUDA(cudaMemcpy(A.elements,a.data(),bytes,cudaMemcpyHostToDevice)); CUDA(cudaMemcpy(B.elements,b.data(),bytes,cudaMemcpyHostToDevice));
+  cudaEvent_t start,stop; CUDA(cudaEventCreate(&start)); CUDA(cudaEventCreate(&stop));
+  dim3 block(BLOCK_SIZE,BLOCK_SIZE),grid((n+BLOCK_SIZE-1)/BLOCK_SIZE,(n+BLOCK_SIZE-1)/BLOCK_SIZE);
+  MatMulKernel<<<grid,block>>>(A,B,C); CUDA(cudaGetLastError()); CUDA(cudaDeviceSynchronize());
+  CUDA(cudaEventRecord(start));
+  MatMulKernel<<<grid,block>>>(A,B,C); CUDA(cudaGetLastError());
+  CUDA(cudaEventRecord(stop)); CUDA(cudaEventSynchronize(stop));
+  float elapsed=0; CUDA(cudaEventElapsedTime(&elapsed,start,stop));
+  CUDA(cudaMemcpy(c.data(),C.elements,bytes,cudaMemcpyDeviceToHost));
+  bool ok=true; double max_error=0;
+  for(int row=0;row<n;++row) for(int col=0;col<n;++col) {
+    double expected=0; for(int k=0;k<n;++k) expected+=double(a[size_t(row)*n+k])*b[size_t(k)*n+col];
+    double err=std::abs(c[size_t(row)*n+col]-expected); max_error=std::max(max_error,err);
+    if(!std::isfinite(c[size_t(row)*n+col]) || err>1e-5) ok=false;
+  }
+  std::printf("side=%d kernel_ms=%.6f max_abs_error=%.9g %s: all %zu outputs checked\n",n,elapsed,max_error,ok?"PASS":"FAIL",count);
+  CUDA(cudaEventDestroy(start)); CUDA(cudaEventDestroy(stop));
+  CUDA(cudaFree(A.elements)); CUDA(cudaFree(B.elements)); CUDA(cudaFree(C.elements));
+  return ok?0:1;
 }

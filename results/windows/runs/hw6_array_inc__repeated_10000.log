@@ -1,0 +1,9 @@
+UTC: 2026-10-05T15:22:07.978041+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw6_array_inc.exe --n 262144 --iterations 10000
+EXIT: 0
+PROCESS_WALL_SECONDS: 1.052372
+
+device=NVIDIA GeForce RTX 3050 Laptop GPU managedMemory=1 concurrentManagedAccess=0
+PASS mode=explicit n=262144 iterations=10000 kernel_total_ms=224.026306 kernel_per_launch_ms=0.022403 ready_ms=225.122800 validated_ms=225.406300
+PASS mode=managed n=262144 iterations=10000 kernel_total_ms=239.459366 kernel_per_launch_ms=0.023946 ready_ms=239.712100 validated_ms=252.334500
+SKIP mode=prefetch: concurrentManagedAccess=0; demand migration/prefetch experiment unsupported

@@ -1,0 +1,1008 @@
+{
+  "updated_utc": "2026-10-05T15:22:10.849037+00:00",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "architecture": "sm_86",
+  "runs": [
+    {
+      "target": "device_info",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.550582,
+      "log": "results/windows/runs/device_info__default.log"
+    },
+    {
+      "target": "hw1_hello",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.532086,
+      "log": "results/windows/runs/hw1_hello__default.log"
+    },
+    {
+      "target": "hw1_vector_add",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.568692,
+      "log": "results/windows/runs/hw1_vector_add__default.log"
+    },
+    {
+      "target": "hw1_matrix_mul",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.54483,
+      "log": "results/windows/runs/hw1_matrix_mul__default.log"
+    },
+    {
+      "target": "hw2_stencil",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.557846,
+      "log": "results/windows/runs/hw2_stencil__default.log"
+    },
+    {
+      "target": "hw2_matrix_mul_shared",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.533579,
+      "log": "results/windows/runs/hw2_matrix_mul_shared__default.log"
+    },
+    {
+      "target": "hw3_vector_add",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.549295,
+      "log": "results/windows/runs/hw3_vector_add__default.log"
+    },
+    {
+      "target": "hw4_matrix_sums",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.565744,
+      "log": "results/windows/runs/hw4_matrix_sums__default.log"
+    },
+    {
+      "target": "hw5_reductions",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.602912,
+      "log": "results/windows/runs/hw5_reductions__default.log"
+    },
+    {
+      "target": "hw5_max_reduction",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.597607,
+      "log": "results/windows/runs/hw5_max_reduction__default.log"
+    },
+    {
+      "target": "hw5_matrix_sums",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.553122,
+      "log": "results/windows/runs/hw5_matrix_sums__default.log"
+    },
+    {
+      "target": "hw6_linked_list",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.860571,
+      "log": "results/windows/runs/hw6_linked_list__default.log"
+    },
+    {
+      "target": "hw6_array_inc",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS_WITH_SKIPS",
+      "exit_code": 0,
+      "process_wall_seconds": 1.252592,
+      "log": "results/windows/runs/hw6_array_inc__default.log"
+    },
+    {
+      "target": "hw7_overlap",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 1.038109,
+      "log": "results/windows/runs/hw7_overlap__default.log"
+    },
+    {
+      "target": "hw7_multi",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS_WITH_SKIPS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.580063,
+      "log": "results/windows/runs/hw7_multi__default.log"
+    },
+    {
+      "target": "hw8_task1",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.811974,
+      "log": "results/windows/runs/hw8_task1__default.log"
+    },
+    {
+      "target": "hw8_task2",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.721886,
+      "log": "results/windows/runs/hw8_task2__default.log"
+    },
+    {
+      "target": "hw8_task3",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.712826,
+      "log": "results/windows/runs/hw8_task3__default.log"
+    },
+    {
+      "target": "hw9_groups",
+      "case": "default",
+      "arguments": [],
+      "status": "FAIL",
+      "exit_code": 125,
+      "process_wall_seconds": 0,
+      "log": "results/windows/runs/hw9_groups__default.log"
+    },
+    {
+      "target": "hw9_compaction",
+      "case": "default",
+      "arguments": [],
+      "status": "FAIL",
+      "exit_code": 125,
+      "process_wall_seconds": 0,
+      "log": "results/windows/runs/hw9_compaction__default.log"
+    },
+    {
+      "target": "hw10_serial",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.780479,
+      "log": "results/windows/runs/hw10_serial__default.log"
+    },
+    {
+      "target": "hw10_streams",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.754512,
+      "log": "results/windows/runs/hw10_streams__default.log"
+    },
+    {
+      "target": "hw10_openmp",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.78879,
+      "log": "results/windows/runs/hw10_openmp__default.log"
+    },
+    {
+      "target": "hw11_process",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.52242,
+      "log": "results/windows/runs/hw11_process__default.log"
+    },
+    {
+      "target": "hw12_matrix",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.454471,
+      "log": "results/windows/runs/hw12_matrix__default.log"
+    },
+    {
+      "target": "hw12_transform",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.442902,
+      "log": "results/windows/runs/hw12_transform__default.log"
+    },
+    {
+      "target": "hw13_axpy_stream_capture_with_fixme",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.512054,
+      "log": "results/windows/runs/hw13_axpy_stream_capture_with_fixme__default.log"
+    },
+    {
+      "target": "hw13_axpy_stream_capture_from_scratch",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.490116,
+      "log": "results/windows/runs/hw13_axpy_stream_capture_from_scratch__default.log"
+    },
+    {
+      "target": "hw13_axpy_stream_capture_timer",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.497189,
+      "log": "results/windows/runs/hw13_axpy_stream_capture_timer__default.log"
+    },
+    {
+      "target": "hw13_axpy_cublas_with_fixme",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 2.780406,
+      "log": "results/windows/runs/hw13_axpy_cublas_with_fixme__default.log"
+    },
+    {
+      "target": "hw13_axpy_cublas_from_scratch",
+      "case": "default",
+      "arguments": [],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.698956,
+      "log": "results/windows/runs/hw13_axpy_cublas_from_scratch__default.log"
+    },
+    {
+      "target": "hw1_vector_add",
+      "case": "edge_1",
+      "arguments": [
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.276264,
+      "log": "results/windows/runs/hw1_vector_add__edge_1.log"
+    },
+    {
+      "target": "hw1_vector_add",
+      "case": "edge_2",
+      "arguments": [
+        "1003"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.31541,
+      "log": "results/windows/runs/hw1_vector_add__edge_2.log"
+    },
+    {
+      "target": "hw1_matrix_mul",
+      "case": "edge_1",
+      "arguments": [
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.353982,
+      "log": "results/windows/runs/hw1_matrix_mul__edge_1.log"
+    },
+    {
+      "target": "hw1_matrix_mul",
+      "case": "edge_2",
+      "arguments": [
+        "17"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.316186,
+      "log": "results/windows/runs/hw1_matrix_mul__edge_2.log"
+    },
+    {
+      "target": "hw1_matrix_mul",
+      "case": "edge_3",
+      "arguments": [
+        "65"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.318904,
+      "log": "results/windows/runs/hw1_matrix_mul__edge_3.log"
+    },
+    {
+      "target": "hw2_matrix_mul_shared",
+      "case": "edge_1",
+      "arguments": [
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.31125,
+      "log": "results/windows/runs/hw2_matrix_mul_shared__edge_1.log"
+    },
+    {
+      "target": "hw2_matrix_mul_shared",
+      "case": "edge_2",
+      "arguments": [
+        "17"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.302008,
+      "log": "results/windows/runs/hw2_matrix_mul_shared__edge_2.log"
+    },
+    {
+      "target": "hw2_matrix_mul_shared",
+      "case": "edge_3",
+      "arguments": [
+        "65"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.342372,
+      "log": "results/windows/runs/hw2_matrix_mul_shared__edge_3.log"
+    },
+    {
+      "target": "hw2_stencil",
+      "case": "edge_1",
+      "arguments": [
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.312575,
+      "log": "results/windows/runs/hw2_stencil__edge_1.log"
+    },
+    {
+      "target": "hw2_stencil",
+      "case": "edge_2",
+      "arguments": [
+        "19"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.264997,
+      "log": "results/windows/runs/hw2_stencil__edge_2.log"
+    },
+    {
+      "target": "hw2_stencil",
+      "case": "edge_3",
+      "arguments": [
+        "4099"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.281269,
+      "log": "results/windows/runs/hw2_stencil__edge_3.log"
+    },
+    {
+      "target": "hw3_vector_add",
+      "case": "edge_1",
+      "arguments": [
+        "1003",
+        "3",
+        "128",
+        "3"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.334046,
+      "log": "results/windows/runs/hw3_vector_add__edge_1.log"
+    },
+    {
+      "target": "hw4_matrix_sums",
+      "case": "edge_1",
+      "arguments": [
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.350544,
+      "log": "results/windows/runs/hw4_matrix_sums__edge_1.log"
+    },
+    {
+      "target": "hw4_matrix_sums",
+      "case": "edge_2",
+      "arguments": [
+        "33"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.31906,
+      "log": "results/windows/runs/hw4_matrix_sums__edge_2.log"
+    },
+    {
+      "target": "hw4_matrix_sums",
+      "case": "edge_3",
+      "arguments": [
+        "257"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.321731,
+      "log": "results/windows/runs/hw4_matrix_sums__edge_3.log"
+    },
+    {
+      "target": "hw5_matrix_sums",
+      "case": "edge_1",
+      "arguments": [
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.272756,
+      "log": "results/windows/runs/hw5_matrix_sums__edge_1.log"
+    },
+    {
+      "target": "hw5_matrix_sums",
+      "case": "edge_2",
+      "arguments": [
+        "33"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.261303,
+      "log": "results/windows/runs/hw5_matrix_sums__edge_2.log"
+    },
+    {
+      "target": "hw5_matrix_sums",
+      "case": "edge_3",
+      "arguments": [
+        "257"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.315548,
+      "log": "results/windows/runs/hw5_matrix_sums__edge_3.log"
+    },
+    {
+      "target": "hw5_max_reduction",
+      "case": "edge_1",
+      "arguments": [
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.302845,
+      "log": "results/windows/runs/hw5_max_reduction__edge_1.log"
+    },
+    {
+      "target": "hw5_max_reduction",
+      "case": "edge_2",
+      "arguments": [
+        "1003"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.279184,
+      "log": "results/windows/runs/hw5_max_reduction__edge_2.log"
+    },
+    {
+      "target": "hw5_reductions",
+      "case": "edge_1",
+      "arguments": [
+        "1003"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.299436,
+      "log": "results/windows/runs/hw5_reductions__edge_1.log"
+    },
+    {
+      "target": "hw6_array_inc",
+      "case": "edge_1",
+      "arguments": [
+        "--n",
+        "1003",
+        "--iterations",
+        "3"
+      ],
+      "status": "PASS_WITH_SKIPS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.612971,
+      "log": "results/windows/runs/hw6_array_inc__edge_1.log"
+    },
+    {
+      "target": "hw7_overlap",
+      "case": "edge_1",
+      "arguments": [
+        "--n",
+        "1003",
+        "--chunks",
+        "7",
+        "--streams",
+        "3",
+        "--repeats",
+        "2"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.342862,
+      "log": "results/windows/runs/hw7_overlap__edge_1.log"
+    },
+    {
+      "target": "hw7_multi",
+      "case": "edge_1",
+      "arguments": [
+        "--n",
+        "1003",
+        "--repeats",
+        "2"
+      ],
+      "status": "PASS_WITH_SKIPS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.314609,
+      "log": "results/windows/runs/hw7_multi__edge_1.log"
+    },
+    {
+      "target": "hw8_task1",
+      "case": "edge_1",
+      "arguments": [
+        "--size",
+        "33",
+        "--iterations",
+        "3"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.267763,
+      "log": "results/windows/runs/hw8_task1__edge_1.log"
+    },
+    {
+      "target": "hw8_task1",
+      "case": "edge_2",
+      "arguments": [
+        "--size",
+        "1031",
+        "--iterations",
+        "5"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.280382,
+      "log": "results/windows/runs/hw8_task1__edge_2.log"
+    },
+    {
+      "target": "hw8_task2",
+      "case": "edge_1",
+      "arguments": [
+        "--size",
+        "33",
+        "--iterations",
+        "3"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.313197,
+      "log": "results/windows/runs/hw8_task2__edge_1.log"
+    },
+    {
+      "target": "hw8_task2",
+      "case": "edge_2",
+      "arguments": [
+        "--size",
+        "1031",
+        "--iterations",
+        "5"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.349269,
+      "log": "results/windows/runs/hw8_task2__edge_2.log"
+    },
+    {
+      "target": "hw8_task3",
+      "case": "edge_1",
+      "arguments": [
+        "--size",
+        "33",
+        "--iterations",
+        "3"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.322898,
+      "log": "results/windows/runs/hw8_task3__edge_1.log"
+    },
+    {
+      "target": "hw8_task3",
+      "case": "edge_2",
+      "arguments": [
+        "--size",
+        "1031",
+        "--iterations",
+        "5"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.364782,
+      "log": "results/windows/runs/hw8_task3__edge_2.log"
+    },
+    {
+      "target": "hw9_compaction",
+      "case": "edge_1",
+      "arguments": [
+        "--n",
+        "1"
+      ],
+      "status": "FAIL",
+      "exit_code": 125,
+      "process_wall_seconds": 0,
+      "log": "results/windows/runs/hw9_compaction__edge_1.log"
+    },
+    {
+      "target": "hw9_compaction",
+      "case": "edge_2",
+      "arguments": [
+        "--n",
+        "1003"
+      ],
+      "status": "FAIL",
+      "exit_code": 125,
+      "process_wall_seconds": 0,
+      "log": "results/windows/runs/hw9_compaction__edge_2.log"
+    },
+    {
+      "target": "hw10_serial",
+      "case": "edge_1",
+      "arguments": [
+        "1003",
+        "7",
+        "3",
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.322705,
+      "log": "results/windows/runs/hw10_serial__edge_1.log"
+    },
+    {
+      "target": "hw10_streams",
+      "case": "edge_1",
+      "arguments": [
+        "1003",
+        "7",
+        "3",
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.305612,
+      "log": "results/windows/runs/hw10_streams__edge_1.log"
+    },
+    {
+      "target": "hw10_openmp",
+      "case": "edge_1",
+      "arguments": [
+        "1003",
+        "7",
+        "3",
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.320619,
+      "log": "results/windows/runs/hw10_openmp__edge_1.log"
+    },
+    {
+      "target": "hw12_matrix",
+      "case": "edge_1",
+      "arguments": [
+        "32"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.281972,
+      "log": "results/windows/runs/hw12_matrix__edge_1.log"
+    },
+    {
+      "target": "hw12_matrix",
+      "case": "edge_2",
+      "arguments": [
+        "65"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.32749,
+      "log": "results/windows/runs/hw12_matrix__edge_2.log"
+    },
+    {
+      "target": "hw12_transform",
+      "case": "edge_1",
+      "arguments": [
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.272725,
+      "log": "results/windows/runs/hw12_transform__edge_1.log"
+    },
+    {
+      "target": "hw12_transform",
+      "case": "edge_2",
+      "arguments": [
+        "1003"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.308485,
+      "log": "results/windows/runs/hw12_transform__edge_2.log"
+    },
+    {
+      "target": "hw13_axpy_stream_capture_with_fixme",
+      "case": "edge_1",
+      "arguments": [
+        "1003",
+        "7"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.329844,
+      "log": "results/windows/runs/hw13_axpy_stream_capture_with_fixme__edge_1.log"
+    },
+    {
+      "target": "hw13_axpy_stream_capture_from_scratch",
+      "case": "edge_1",
+      "arguments": [
+        "1003",
+        "7"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.355423,
+      "log": "results/windows/runs/hw13_axpy_stream_capture_from_scratch__edge_1.log"
+    },
+    {
+      "target": "hw13_axpy_stream_capture_timer",
+      "case": "edge_1",
+      "arguments": [
+        "1003",
+        "7"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.352354,
+      "log": "results/windows/runs/hw13_axpy_stream_capture_timer__edge_1.log"
+    },
+    {
+      "target": "hw13_axpy_cublas_with_fixme",
+      "case": "edge_1",
+      "arguments": [
+        "1003",
+        "7"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.615591,
+      "log": "results/windows/runs/hw13_axpy_cublas_with_fixme__edge_1.log"
+    },
+    {
+      "target": "hw13_axpy_cublas_from_scratch",
+      "case": "edge_1",
+      "arguments": [
+        "1003",
+        "7"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.596928,
+      "log": "results/windows/runs/hw13_axpy_cublas_from_scratch__edge_1.log"
+    },
+    {
+      "target": "hw3_vector_add",
+      "case": "launch_1x1",
+      "arguments": [
+        "262144",
+        "1",
+        "1",
+        "3"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.376521,
+      "log": "results/windows/runs/hw3_vector_add__launch_1x1.log"
+    },
+    {
+      "target": "hw3_vector_add",
+      "case": "launch_1x1024",
+      "arguments": [
+        "262144",
+        "1",
+        "1024",
+        "10"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.303493,
+      "log": "results/windows/runs/hw3_vector_add__launch_1x1024.log"
+    },
+    {
+      "target": "hw3_vector_add",
+      "case": "launch_1x256",
+      "arguments": [
+        "262144",
+        "1",
+        "256",
+        "10"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.280456,
+      "log": "results/windows/runs/hw3_vector_add__launch_1x256.log"
+    },
+    {
+      "target": "hw3_vector_add",
+      "case": "launch_32x256",
+      "arguments": [
+        "262144",
+        "32",
+        "256",
+        "10"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.329023,
+      "log": "results/windows/runs/hw3_vector_add__launch_32x256.log"
+    },
+    {
+      "target": "hw3_vector_add",
+      "case": "launch_160x256",
+      "arguments": [
+        "262144",
+        "160",
+        "256",
+        "10"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.282859,
+      "log": "results/windows/runs/hw3_vector_add__launch_160x256.log"
+    },
+    {
+      "target": "hw3_vector_add",
+      "case": "launch_160x1024",
+      "arguments": [
+        "262144",
+        "160",
+        "1024",
+        "10"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.265318,
+      "log": "results/windows/runs/hw3_vector_add__launch_160x1024.log"
+    },
+    {
+      "target": "hw3_vector_add",
+      "case": "large_vector",
+      "arguments": [
+        "16777216",
+        "160",
+        "256",
+        "10"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.642621,
+      "log": "results/windows/runs/hw3_vector_add__large_vector.log"
+    },
+    {
+      "target": "hw5_reductions",
+      "case": "small",
+      "arguments": [
+        "163840",
+        "3"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.326652,
+      "log": "results/windows/runs/hw5_reductions__small.log"
+    },
+    {
+      "target": "hw5_reductions",
+      "case": "precision_32M",
+      "arguments": [
+        "33554432",
+        "3"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.701791,
+      "log": "results/windows/runs/hw5_reductions__precision_32M.log"
+    },
+    {
+      "target": "hw6_array_inc",
+      "case": "repeated_10000",
+      "arguments": [
+        "--n",
+        "262144",
+        "--iterations",
+        "10000"
+      ],
+      "status": "PASS_WITH_SKIPS",
+      "exit_code": 0,
+      "process_wall_seconds": 1.052372,
+      "log": "results/windows/runs/hw6_array_inc__repeated_10000.log"
+    },
+    {
+      "target": "hw7_overlap",
+      "case": "one_stream",
+      "arguments": [
+        "--streams",
+        "1"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.614001,
+      "log": "results/windows/runs/hw7_overlap__one_stream.log"
+    },
+    {
+      "target": "hw7_overlap",
+      "case": "eight_streams",
+      "arguments": [
+        "--streams",
+        "8"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.590543,
+      "log": "results/windows/runs/hw7_overlap__eight_streams.log"
+    },
+    {
+      "target": "hw9_compaction",
+      "case": "large",
+      "arguments": [
+        "--n",
+        "1048576",
+        "--iterations",
+        "3"
+      ],
+      "status": "FAIL",
+      "exit_code": 125,
+      "process_wall_seconds": 0,
+      "log": "results/windows/runs/hw9_compaction__large.log"
+    },
+    {
+      "target": "hw10_openmp",
+      "case": "four_gpu_bonus",
+      "arguments": [
+        "1048576",
+        "16",
+        "4",
+        "4"
+      ],
+      "status": "PASS",
+      "exit_code": 0,
+      "process_wall_seconds": 0.600297,
+      "log": "results/windows/runs/hw10_openmp__four_gpu_bonus.log"
+    }
+  ]
+}

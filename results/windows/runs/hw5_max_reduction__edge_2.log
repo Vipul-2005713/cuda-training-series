@@ -1,0 +1,7 @@
+UTC: 2026-10-05T15:21:56.234202+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw5_max_reduction.exe 1003
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.279184
+
+PASS max_reduction case=mixed N=1003 repeats=10 two_stage_ms=0.035840 input_GB_s=0.112 result=123 expected=123
+PASS max_reduction case=all_negative N=1003 repeats=10 two_stage_ms=0.040237 input_GB_s=0.100 result=-1 expected=-1

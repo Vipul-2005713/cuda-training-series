@@ -1,77 +1,49 @@
-#include <stdio.h>
-#include <algorithm>
-
-using namespace std;
-
-#define N 4096
-#define RADIUS 3
-#define BLOCK_SIZE 16
-
-__global__ void stencil_1d(int *in, int *out) {
-    __shared__ int temp[FIXME];
-    int gindex = threadIdx.x + blockIdx.x * blockDim.x;
-    int lindex = FIXME;
-
-    // Read input elements into shared memory
-    temp[lindex] = in[gindex];
-    if (threadIdx.x < RADIUS) {
-      temp[lindex - RADIUS] = in[gindex - RADIUS];
-      temp[lindex + BLOCK_SIZE] = in[gindex + BLOCK_SIZE];
+﻿#include "../hw1/cuda_helpers.cuh"
+constexpr int RADIUS = 3;
+constexpr int BLOCK_SIZE = 16;
+// in/out point to the first interior element; each allocation also has two halos.
+__global__ void stencil_1d(const int* in, int* out, int n) {
+    __shared__ int temp[BLOCK_SIZE + 2 * RADIUS];
+    const int base = blockIdx.x * BLOCK_SIZE;
+    // Cooperative loads include both halos. Bounds also protect the partial last block.
+    for (int local = threadIdx.x; local < BLOCK_SIZE + 2 * RADIUS; local += BLOCK_SIZE) {
+        const int index = base + local - RADIUS;
+        temp[local] = index < n + RADIUS ? in[index] : 0;
     }
-
-    // Synchronize (ensure all the data is available)
     __syncthreads();
-
-    // Apply the stencil
-    int result = 0;
-    for (int offset = -RADIUS; offset <= RADIUS; offset++)
-      result += temp[FIXME];
-
-    // Store the result
-    out[gindex] = result;
-}
-
-void fill_ints(int *x, int n) {
-  fill_n(x, n, 1);
-}
-
-int main(void) {
-  int *in, *out; // host copies of a, b, c
-  int *d_in, *d_out; // device copies of a, b, c
-
-  // Alloc space for host copies and setup values
-  int size = (FIXME) * sizeof(int);
-  in = (int *)malloc(size); fill_ints(in, N + 2*RADIUS);
-  out = (int *)malloc(size); fill_ints(out, N + 2*RADIUS);
-
-  // Alloc space for device copies
-  cudaMalloc((void **)&d_in, size);
-  cudaMalloc((void **)&d_out, size);
-
-  // Copy to device
-  cudaMemcpy(d_in, in, size, cudaMemcpyHostToDevice);
-  cudaMemcpy(d_out, out, size, cudaMemcpyHostToDevice);
-
-  // Launch stencil_1d() kernel on GPU
-  stencil_1d<<<N/BLOCK_SIZE,BLOCK_SIZE>>>(FIXME, FIXME);
-
-  // Copy result back to host
-  cudaMemcpy(out, d_out, size, cudaMemcpyDeviceToHost);
-
-  // Error Checking
-  for (int i = 0; i < N + 2*RADIUS; i++) {
-    if (i<RADIUS || i>=N+RADIUS){
-      if (out[i] != 1)
-    	printf("Mismatch at index %d, was: %d, should be: %d\n", i, out[i], 1);
-    } else {
-      if (out[i] != 1 + 2*RADIUS)
-    	printf("Mismatch at index %d, was: %d, should be: %d\n", i, out[i], 1 + 2*RADIUS);
+    const int index = base + threadIdx.x;
+    if (index < n) {
+        int sum = 0;
+        for (int offset = -RADIUS; offset <= RADIUS; ++offset)
+            sum += temp[threadIdx.x + RADIUS + offset];
+        out[index] = sum;
     }
-  }
-
-  // Cleanup
-  free(in); free(out);
-  cudaFree(d_in); cudaFree(d_out);
-  printf("Success!\n");
-  return 0;
 }
+// Usage: stencil_1d [interior_elements=1048576] [repeats=20]
+int main(int argc, char** argv) {
+    return checked_main([&] {
+        const int n = int_arg(argc, argv, 1, 1048576);
+        const int repeats = int_arg(argc, argv, 2, 20, 1, 10000);
+        const size_t count = size_t(n) + 2 * RADIUS, bytes = count * sizeof(int);
+        std::vector<int> input(count), output(count, 1);
+        for (size_t i = 0; i < count; ++i) input[i] = int(i % 17) - 8;
+        DeviceBuffer<int> din(count), dout(count);
+        CUDA_CHECK(cudaMemcpy(din.data, input.data(), bytes, cudaMemcpyHostToDevice));
+        CUDA_CHECK(cudaMemcpy(dout.data, output.data(), bytes, cudaMemcpyHostToDevice));
+        const float ms = kernel_ms([&] {
+            stencil_1d<<<(n + BLOCK_SIZE - 1) / BLOCK_SIZE, BLOCK_SIZE>>>(din.data + RADIUS, dout.data + RADIUS, n);
+        }, repeats);
+        CUDA_CHECK(cudaMemcpy(output.data(), dout.data, bytes, cudaMemcpyDeviceToHost));
+        for (size_t i = 0; i < count; ++i) {
+            int expected = 1; // output halos must be untouched
+            if (i >= RADIUS && i < size_t(n) + RADIUS) {
+                expected = 0;
+                for (int offset = -RADIUS; offset <= RADIUS; ++offset) expected += input[size_t(static_cast<long long>(i) + offset)];
+            }
+            if (output[i] != expected) throw std::runtime_error("stencil mismatch at " + std::to_string(i));
+        }
+        std::printf("PASS stencil_1d N=%d repeats=%d kernel_ms=%.6f checked=%zu (including halos)\n", n, repeats, ms, count);
+        return 0;
+    });
+}
+

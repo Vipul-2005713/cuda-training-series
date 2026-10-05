@@ -1,0 +1,12 @@
+UTC: 2026-10-05T15:21:46.808416+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw13_axpy_cublas_with_fixme.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 2.780406
+
+direct_cublas PASS all_elements=65536 max_abs_error=0
+cublas_child_graph PASS all_elements=65536 max_abs_error=0
+N=65536 repetitions=100 exact_recurrence=y0+repetitions*(5*x+2)
+parent_graph_nodes=3 child_graph_nodes=1 creation_ms=0.832500 instantiate_ms=0.340000
+direct_cublas total_wall_ms=18.300100 total_gpu_event_ms=18.146816 wall_us_per_iteration=183.001000
+cublas_child_graph total_wall_ms=4.657500 total_gpu_event_ms=4.604608 wall_us_per_iteration=46.575000
+wall_speedup=3.929168 graph_setup_plus_replay_ms=5.830000

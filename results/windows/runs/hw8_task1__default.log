@@ -1,0 +1,7 @@
+UTC: 2026-10-05T15:21:39.279777+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw8_task1.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.811974
+
+PASS transpose variant=naive size=2048 iterations=20 cpu_ms=78.762700 kernel_ms=0.680742 effective_GBps=98.582
+D2D_copy_ms=0.405544 D2D_effective_GBps=165.479 transpose_to_copy_ratio=0.596

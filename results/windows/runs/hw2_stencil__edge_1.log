@@ -1,0 +1,6 @@
+UTC: 2026-10-05T15:21:52.846723+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw2_stencil.exe 1
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.312575
+
+PASS stencil_1d N=1 repeats=20 kernel_ms=0.050432 checked=7 (including halos)

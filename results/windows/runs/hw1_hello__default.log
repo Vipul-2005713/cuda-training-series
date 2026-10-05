@@ -1,0 +1,9 @@
+UTC: 2026-10-05T15:21:29.907617+00:00
+COMMAND: D:\CUDA\cuda-training-series\build\windows\hw1_hello.exe
+EXIT: 0
+PROCESS_WALL_SECONDS: 0.532086
+
+Hello from block: 0, thread: 0
+Hello from block: 0, thread: 1
+Hello from block: 1, thread: 0
+Hello from block: 1, thread: 1
