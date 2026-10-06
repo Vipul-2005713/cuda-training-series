@@ -1,3 +1,5 @@
+> Historical report from the earlier Windows environment. These measurements are not Ubuntu/WSL results. Use [readme.md](readme.md) for current Ubuntu commands and expected behavior; fresh logs go to `results/ubuntu/`.
+
 ﻿# Homework 5 — reductions, floating-point limits, and faster row sums
 
 Completed programs: [reductions.cu](reductions.cu), [max_reduction.cu](max_reduction.cu), and [matrix_sums.cu](matrix_sums.cu). Assignment: [readme.md](readme.md). Historical reference solutions are unchanged.

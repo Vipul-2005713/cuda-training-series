@@ -1,117 +1,87 @@
-# **Task 1**
+# HW12: CUDA debugging and numerical validation
 
-In this task we will explore using compute-sanitizer.  A complete tiled matrix-multiply example code is provided in the CUDA programming guide. The *task1.cu* code includes this code with a few changes, and also a main() routine to drive the operation.  You are providing support services to a cluster user community, and one of your users has presented this code with the report that "CUDA error checking doesn't show any errors, but I'm not getting the right answer.  Please help!"
+These are the corrected debugging exercises. `task1.cu` performs a tiled matrix
+product with boundary handling and synchronization. `task2.cu` estimates ln(2)
+using a shared-memory reduction and double-precision atomics. It checks against
+a CPU reference and a series truncation bound. Running these files should succeed; the original bugs are
+described in the archived lesson.
 
-First, compile the code as follows, and run the code to observe the reported behavior:
+## Build and run on Ubuntu / WSL2
 
-```
-module load cuda
-nvcc -arch=sm_70 task1.cu -o task1 -lineinfo
-```
+Use an **Ubuntu Bash terminal**, with the Linux CUDA Toolkit, `g++`, and Python 3
+available. Run all commands below from the **repository root** (`cuda-training-series`),
+not this homework directory. See the [main setup guide](../../README.md) first.
 
-We are compiling the code for the GPU architecture being used (Volta SM 7.0 in this case) and we are also compiling with --lineinfo switch. You know as a CUDA support engineer that this will be a useful switch when it comes to using compute-sanitizer.
-
-To run your code, we will use an LSF command:
-
-```
-bsub -W 10 -nnodes 1 -P <allocation_ID> -Is jsrun -n1 -a1 -c1 -g1 ./task1
-```
-
-Alternatively, you may want to create an alias for your bsub command in order to make subsequent runs easier:
-
-```
-alias lsfrun='bsub -W 10 -nnodes 1 -P <allocation_ID> -Is jsrun -n1 -a1 -c1 -g1'
-lsfrun ./task1
+```bash
+source tools/ubuntu_env.sh
+python3 tools/run_exercises.py --build --hw 12 --suite default
 ```
 
-To build your code on NERSC's Cori-GPU
+This builds the homework's programs into `build/ubuntu/` and runs their default
+checks. To run the individual programs or change problem sizes after building:
 
-```
-module load cgpu cuda/11.4.0
-nvcc -arch=sm_70 task1.cu -o task1 -lineinfo
-```
-
-To run during the node reservation (10:30-12:30 Pacific time on September 14):
-```
-module load cgpu cuda/11.4.0
-srun -C gpu -N 1 -n 1 -t 10 -A ntrain --reservation=cuda_debug -q shared -G 1 -c 1 ./task1
+```bash
+./build/ubuntu/hw12_matrix 32
+./build/ubuntu/hw12_matrix 65
+./build/ubuntu/hw12_transform 1
+./build/ubuntu/hw12_transform 1003
+./build/ubuntu/hw12_transform
 ```
 
-or grab a GPU node first, then run interactively:
-```
-module load cgpu cuda 
-salloc -C gpu -N 1 -t 60 -A ntrain --reservation=cuda_debug -q shared -G 1 -c 1
-srun -n 1 ./task1
-```
+## What to expect
 
-To run outside of the node reservation window:
-Same steps as above, but do not include "*--reservation=cuda_debug -q shared*" in the srun or salloc commands.
+- Matrix runs print `PASS: all ... outputs checked`, `max_abs_error`, and kernel time. Side 65 tests incomplete shared-memory tiles.
+- The series reduction prints `estimate`, `cpu_reference`, `log2`, `cpu_abs_error`, `truncation_bound`, and `PASS`.
+- Arguments: matrix `[side=128]`; series `[terms=1048576]`. A small number of terms can be a poor approximation to ln(2) while still correctly computing that finite series.
+- More terms should reduce truncation error; floating-point differences remain subject to the printed tolerance.
 
-If this code produces the correct matrix result, it will display:
+## Check with Compute Sanitizer
 
-```
-Success!
-```
+From the repository root after building (the runner includes `-lineinfo`):
 
-But unfortunately we don't see that.
-
-## Part A 
-
-Use basic *compute-sanitizer* functionality (no additional switches) to identify a problem in the code. Using the output from *compute-sanitizer*, identify the offending line of code. Fix this issue.
-
-Hints:
-  - Remember that *-lineinfo* will cause compute-sanitizer (in this usage) to report the actual line of code that is causing the problem
-  - Even if you didn't have this information (line number) could you use other compute sanitizer information to quickly deduce the line to focus on in this case?  You could use the type of memory access violation as a clue.  Which lines of code in the kernel are doing that type of memory access (hint, there is only one line of kernel code that is doing this.)
-  - Memory access problems are often caused by indexing errors.  See if you can spot an indexing error that may lead to this issue (hint - the classic computer science "off by one" error.)
-  - Refer to *task1_solution.cu* if you get stuck
-
-## Part B
-
-Yay! You sorted out the problem, made the change to indexing, and now the code prints "Success!"  It's time to send the user on their way. Or is it? Could there be other errors?  Use additional compute-sanitizer switches (*--tool racecheck*, *--tool initcheck*, *--tool synccheck*) to identify other "latent" issues. Fix them.
-
-Hints:
-  - The only tool that should report a problem at this point is the racecheck tool.
-  - See if you can use the line number information embedded in the error reports to identify the trouble "zone" in the kernel code
-  - Since you know that the racecheck tool reports race issues with shared memory usage (only), and that these often involve missing synchronization, can you identify the right place to insert appropriate synchronization into the kernel code? Try experimenting. Inserting additional synchronization into a CUDA kernel code usually does not break code correctness.
-  - Refer to *task1_solution.cu* if you get stuck
-
-# **Task 2**
-
-In this task we will explore basic usage of cuda-gdb. Once again you are providing user support at a cluster help desk. The user has a code that produces a *-inf* (negative floating-point infinity) result, and that is not expected. The code consists of a transformation operation (one data element created/modified per thread) followed by a reduction operation (per-thread results summed together). The output of the reduction is *-inf*. See if you can use *cuda-gdb* to identify the problem and rectify it.
-
-To prepare to use *cuda-gdb*, its necessary to compile a debug project. Therefore compile the code as follows:
-
-```
-nvcc -arch=sm_70 task2.cu -o task2 -G -g -std=c++14
+```bash
+bash tools/compute_sanitizer.sh --tool memcheck --error-exitcode 1 ./build/ubuntu/hw12_matrix 65
+bash tools/compute_sanitizer.sh --tool racecheck --error-exitcode 1 ./build/ubuntu/hw12_matrix 65
+bash tools/compute_sanitizer.sh --tool synccheck --error-exitcode 1 ./build/ubuntu/hw12_matrix 65
+bash tools/compute_sanitizer.sh --tool memcheck --error-exitcode 1 ./build/ubuntu/hw12_transform 1003
 ```
 
-You can then start debugging.
+The wrapper sets the WSL driver path and locates the injection libraries in
+Ubuntu's toolkit package, fixing `Unable to find injection library
+libsanitizer-collection.so` on this installation. It passes your arguments to
+Compute Sanitizer; see [NVIDIA's command-line options](https://docs.nvidia.com/compute-sanitizer/ComputeSanitizer/index.html#command-line-options).
 
-On Summit:
+On this machine, Compute Sanitizer 2022.4.1 still exits with `Target application
+terminated before first instrumented API call` after resolving the library paths.
+The normal HW12 runs pass, but sanitizer validation remains **unverified** on
+this installed tool/driver combination. This startup error is not a clean
+sanitizer result.
 
+With a working sanitizer installation, expect the program to pass and the tool to report zero errors/hazards. Sanitizer
+availability depends on your installed tooling and WSL driver. For an interactive
+`cuda-gdb` build, use `nvcc -std=c++17 -arch=sm_86 -G -g exercises/hw12/task1.cu -o build/ubuntu/hw12_matrix_debug`;
+run `cuda-gdb --args ./build/ubuntu/hw12_matrix_debug 65`. Debug builds are not
+suitable for performance comparisons.
+
+## Check the complete homework
+
+```bash
+python3 tools/run_exercises.py --hw 12 --suite all
 ```
-jsrun -n1 -a1 -c1 -g1 cuda-gdb ./task2
-```
 
-On Cori:
+This runs the default, boundary, and any additional experiments defined for HW12.
+Add `--build` after changing code. Add `--include-solutions --build` to check the
+reference entry points too; they share the completed exercise implementations.
+The runner reports `PASS`, `PASS_WITH_SKIPS`, or `FAIL`, and returns nonzero on
+build errors, timeouts, or failed checks. Kernel timings vary with hardware and
+system load; use correctness messages to judge success.
 
-```
-srun -n 1 ./task2
-```
+Detailed output is in `results/ubuntu/runs/`, compiler output is in
+`results/ubuntu/build/`, and the latest invocation has `summary.json` and
+`summary.csv`. Use `--output results/ubuntu/hw12` to keep this homework's logs
+separate. For a different GPU, pass `--arch sm_XX`; the default `sm_86` matches
+the RTX 3050. For compiler selection, use `--ccbin g++-12` when needed.
 
-Don't forget that you cannot inspect device data until you are stopped after a device-code breakpoint.
-
-Once you have identified the source of the issue, see if you can propose a simple code modification to work around the issue. If you get stuck on this part (proposing a solution), refer to the *task2_solution.cu*. Careful code inspection will likely immediately point out the issue, however the purpose of this task is not actually to fix the code this way, but to learn to use *cuda-gdb*.
-
-Hints:
- - The code is attempting to estimate the sum of an alternating harmonic series (ahs), whose sum should be equal to the natural log of 2.
- - The code is broken into two parts: the ahs term generator (produced by the device function ahs) which takes only the index of the term to generate, and a standard sweep parallel reduction, similar to the content in session 5 of this training series.
- - Generally speaking, floating point arithmetic on *inf* or *-inf* inputs will produce a *inf* or *-inf* output
- - Decide whether you think the *-inf* is likely to appear as a result of the initial transformation operation, or the subsequent reduction operation
- - Use this reasoning to choose a point for an initial breakpoint
- - Inspect data to see if you can observe *-inf* in any of the intermediate data
- - Use this observation to repeat the process of setting a breakpoint and inspecting data
- - Alternatively, work linearly through the code, setting an initial breakpoint and single-stepping, to see if you can observe incorrect data
- - You may need to change thread focus or observe data belonging to other threads
- - The reduction also offers the opportunity to tackle this problem via divide-and-conquer, or binary searching
- - Consider reducing the problem size (i.e. length of terms to generate the estimate) to simplify your debug effort
+The [original lecture assignment](LESSON.md) is preserved for background. Its
+cluster commands, FIXME locations, and historical timings do not describe the
+current completed Ubuntu programs.

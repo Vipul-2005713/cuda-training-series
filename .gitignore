@@ -15,4 +15,6 @@ tmp/
 *.qdrep
 *.sqlite
 __pycache__/
-
+results/ubuntu/
+*.o
+*.qdstrm

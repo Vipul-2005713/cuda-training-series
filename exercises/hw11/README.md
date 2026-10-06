@@ -1,52 +1,81 @@
-# Multi-Process Service
+# HW11: Multiple processes and the MPS experiment
 
-On Cori GPU, first grab an interactive session. Make sure that you request at least a few slots for MPI, but we'll only need one GPU.
+`test.cu` splits a total vector across processes and repeatedly doubles each
+process's slice. The standard runner builds with `-DNO_MPI`, so the WSL homework
+runs without an MPI installation. MPS is a separate optional experiment.
 
-```
-module purge
-module load cgpu gcc/8.3.0 cuda/11.4.0 openmpi/4.0.3
-salloc -A ntrain -q shared --reservation=cuda_mps -C gpu -N 1 -n 4 -t 60 -c 4 --gpus=1
-```
+## Build and run on Ubuntu / WSL2
 
-The test code used in the lecture is in `test.cu`, and it can be compiled with.
+Use an **Ubuntu Bash terminal**, with the Linux CUDA Toolkit, `g++`, and Python 3
+available. Run all commands below from the **repository root** (`cuda-training-series`),
+not this homework directory. See the [main setup guide](../../README.md) first.
 
-```
-nvcc -o test -ccbin=mpicxx test.cu
-```
-
-If you're running somewhere where you don't have MPI, you can compile the application without MPI as follows:
-
-```
-nvcc -DNO_MPI -o test test.cu
+```bash
+source tools/ubuntu_env.sh
+python3 tools/run_exercises.py --build --hw 11 --suite default
 ```
 
-Then in all of the examples below, instead of launching with `mpirun`, use the provided `run_no_mpi.sh` script, which launches 4 redundant copies of the same process. This script might also be useful for systems like Summit where you launch jobs from a different node than the compute node, where `nsys jsrun ...` is less useful than `jsrun ... nsys`.
+This builds the homework's programs into `build/ubuntu/` and runs their default
+checks. To run the individual programs or change problem sizes after building:
 
-## Verifying the lecture findings
-
-Your exercise is to try some of the experiments from the lecture and see if you can reproduce the findings. Try the following experiments first, without MPS (note that this application does take about 20 seconds to run, so be patient):
-
-```
-nsys profile --stats=true -t nvtx,cuda -s none -o 1_rank_no_MPS_N_1e9 -f true mpirun -np 1 ./test 1073741824
-nsys profile --stats=true -t nvtx,cuda -s none -o 4_ranks_no_MPS_N_1e9 -f true mpirun -np 4 ./test 1073741824
+```bash
+./build/ubuntu/hw11_process 1048576 1 100 0
+bash exercises/hw11/run_no_mpi.sh 1048576 4 100
+bash exercises/hw11/run_no_mpi.sh 1003 4 10
 ```
 
-Verify from both the application stdout and from the profiling data that the average kernel runtime is longer when using 4 ranks on the same GPU.
+## What to expect
 
-Now start MPS and repeat the above experiment with 4 ranks, verifying that the average kernel runtime is about the same as in the 1 rank case (again, consult both the stdout and the profiling data).
+- A one-process run prints one line ending in `PASS`; the launcher prints one `PASS` line for each rank 0–3, in any order.
+- Output includes `N_total`, `N_local`, `elapsed_ms`, and `wall_ms_per_kernel`. With N=1048576 and four ranks, each rank checks 262144 elements.
+- The initial value is `2^-repetitions`; after doubling, every result must equal 1. This avoids overflow during verification.
+- Executable arguments: `[total_N=1048576] [rank_count=1] [repetitions=100] [rank_index=0] [optional_start_epoch_ms]`.
+- Launcher arguments: `[total_N=1048576] [ranks=4] [repetitions=100] [executable=build/ubuntu/hw11_process] [launch_delay_seconds=5]`. The default executable path is resolved relative to the script.
+- The launcher waits for every process and returns nonzero if any fails. If a rank warns that it missed the common start, increase the delay, e.g. `bash exercises/hw11/run_no_mpi.sh 1048576 4 100 ./build/ubuntu/hw11_process 15`.
 
+## Optional MPI build on Ubuntu
+
+If you choose to use MPI, install `libopenmpi-dev` and `openmpi-bin` with Ubuntu's
+package manager. Then, from the repository root:
+
+```bash
+mkdir -p build/ubuntu
+nvcc -O3 -std=c++17 -arch=sm_86 -ccbin mpicxx exercises/hw11/test.cu -o build/ubuntu/hw11_mpi
+mpirun --oversubscribe -np 4 ./build/ubuntu/hw11_mpi 1048576 4 100
 ```
-nvidia-cuda-mps-control -d
-nsys profile --stats=true -t nvtx,cuda -s none -o 4_ranks_with_MPS_N_1e9 -f true mpirun -np 4 ./test 1073741824
+
+MPI supplies rank count and index; retain the second positional placeholder so
+100 remains the repetition count. This optional build is not part of the default
+suite and requires an MPI wrapper using a CUDA-compatible host compiler.
+
+## Optional MPS comparison
+
+One versus four ordinary processes works without MPS. Do not treat that as an
+MPS-on result. MPS requires a supported driver, GPU, and execution environment;
+Ubuntu inside WSL alone does not establish support. Follow [NVIDIA's MPS deployment
+guide](https://docs.nvidia.com/deploy/mps/index.html) on a supported setup, verify
+that clients actually connect, then compare the same total N and repetitions
+with and without the MPS server. The runner does not start or reconfigure MPS.
+
+## Check the complete homework
+
+```bash
+python3 tools/run_exercises.py --hw 11 --suite all
 ```
 
-Now verify that you can stop MPS and the original behavior returns.
+This runs the default, boundary, and any additional experiments defined for HW11.
+Add `--build` after changing code. Add `--include-solutions --build` to check the
+reference entry points too; they share the completed exercise implementations.
+The runner reports `PASS`, `PASS_WITH_SKIPS`, or `FAIL`, and returns nonzero on
+build errors, timeouts, or failed checks. Kernel timings vary with hardware and
+system load; use correctness messages to judge success.
 
-```
-echo "quit" | nvidia-cuda-mps-control
-nsys profile --stats=true -t nvtx,cuda -s none -o 4_ranks_no_MPS_N_1e9 -f true mpirun -np 4 ./test 1073741824
-```
+Detailed output is in `results/ubuntu/runs/`, compiler output is in
+`results/ubuntu/build/`, and the latest invocation has `summary.json` and
+`summary.csv`. Use `--output results/ubuntu/hw11` to keep this homework's logs
+separate. For a different GPU, pass `--arch sm_XX`; the default `sm_86` matches
+the RTX 3050. For compiler selection, use `--ccbin g++-12` when needed.
 
-## Experimenting with problem size
-
-Vary the problem size `N` until you've found the minimum size where you can definitively say that MPS provides a clear benefit over the default compute mode case.
+The [original lecture assignment](LESSON.md) is preserved for background. Its
+cluster commands, FIXME locations, and historical timings do not describe the
+current completed Ubuntu programs.

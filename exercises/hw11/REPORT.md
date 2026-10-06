@@ -1,3 +1,5 @@
+> Historical report from the earlier Windows environment. These measurements are not Ubuntu/WSL results. Use [README.md](README.md) for current Ubuntu commands and expected behavior; fresh logs go to `results/ubuntu/`.
+
 ﻿# Homework 11: multi-process GPU execution and MPS
 
 `test.cu` repairs the lecture benchmark and supports both MPI and ordinary processes. `run_no_mpi.ps1` is the Windows launcher; `run_no_mpi.sh` serves Linux. The native Windows machine can measure one versus four processes without MPS. MPS-on experiments and the minimum beneficial problem size require a supported MPS environment and cannot be inferred from the Windows measurements.

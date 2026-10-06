@@ -1,4 +1,4 @@
-﻿#include "cuda_helpers.cuh"
+#include "cuda_helpers.cuh"
 __global__ void hello() {
     printf("Hello from block: %u, thread: %u\n", blockIdx.x, threadIdx.x);
 }

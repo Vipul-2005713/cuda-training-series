@@ -1,1 +1,4 @@
-nvcc -O3 -o task2 task2.cu
+#!/usr/bin/env bash
+set -euo pipefail
+cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../../.."
+exec python3 tools/run_exercises.py --build --only hw8_task2 --suite none "$@"

@@ -1,4 +1,4 @@
-﻿#include "matrix_driver.cuh"
+#include "matrix_driver.cuh"
 __global__ void mmul(const float* a, const float* b, float* c, int n) {
     const int col = blockIdx.x * blockDim.x + threadIdx.x;
     const int row = blockIdx.y * blockDim.y + threadIdx.y;

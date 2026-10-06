@@ -1,3 +1,5 @@
+> Historical report from the earlier Windows environment. These measurements are not Ubuntu/WSL results. Use [readme.md](readme.md) for current Ubuntu commands and expected behavior; fresh logs go to `results/ubuntu/`.
+
 ﻿# Homework 2 — shared-memory stencil and tiled matrix multiplication
 
 Completed sources: [stencil_1d.cu](stencil_1d.cu) and [matrix_mul_shared.cu](matrix_mul_shared.cu). Assignment: [readme.md](readme.md). Original reference solutions are preserved.

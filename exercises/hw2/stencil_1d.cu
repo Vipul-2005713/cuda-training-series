@@ -1,4 +1,4 @@
-﻿#include "../hw1/cuda_helpers.cuh"
+#include "../hw1/cuda_helpers.cuh"
 constexpr int RADIUS = 3;
 constexpr int BLOCK_SIZE = 16;
 // in/out point to the first interior element; each allocation also has two halos.

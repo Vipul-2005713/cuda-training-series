@@ -1,1 +1,13 @@
-nv-nsight-cu-cli --metrics l1tex__t_sectors_pipe_lsu_mem_global_op_ld.sum,l1tex__t_requests_pipe_lsu_mem_global_op_ld.sum,l1tex__t_sectors_pipe_lsu_mem_global_op_st.sum,l1tex__t_requests_pipe_lsu_mem_global_op_st.sum,l1tex__data_pipe_lsu_wavefronts_mem_shared_op_ld.sum,l1tex__data_pipe_lsu_wavefronts_mem_shared_op_st.sum,l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_ld.sum,l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_st.sum,smsp__cycles_active.avg.pct_of_peak_sustained_elapsed ./task2
+#!/usr/bin/env bash
+set -euo pipefail
+cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../../.."
+source tools/ubuntu_env.sh
+if ! command -v ncu >/dev/null 2>&1; then
+  echo "ncu is missing; install the Linux Nsight Compute CLI to profile this optional experiment." >&2
+  exit 2
+fi
+if [[ ! -x build/ubuntu/hw8_task2 ]]; then
+  echo "Build first: bash exercises/hw8/task2/build_nvcc" >&2
+  exit 2
+fi
+exec ncu --section MemoryWorkloadAnalysis --launch-count 1 ./build/ubuntu/hw8_task2 "$@"

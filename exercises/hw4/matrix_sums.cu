@@ -1,4 +1,4 @@
-﻿#include "matrix_sums_kernels.cuh"
+#include "matrix_sums_kernels.cuh"
 #include "matrix_sums_driver.cuh"
 // Usage: matrix_sums [matrix_side=2048] [repeats=10]
 int main(int argc, char** argv) {

@@ -1,12 +1,3 @@
-#include <stdio.h>
-
-__global__ void hello(){
-
-  printf("Hello from block: %u, thread: %u\n", blockIdx.x, threadIdx.x);
-}
-
-int main(){
-  hello<<<2,2>>>();
-  cudaDeviceSynchronize();
-}
-
+// Reference entry point: share the corrected, validated Ubuntu implementation.
+// Compile this file on its own, with the same flags as the matching exercise.
+#include "hello.cu"

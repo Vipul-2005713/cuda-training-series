@@ -6,6 +6,12 @@
     "openmp": false
   },
   {
+    "name": "cuda_smoke",
+    "source": "test.cu",
+    "flags": [],
+    "openmp": false
+  },
+  {
     "name": "hw1_hello",
     "source": "exercises/hw1/hello.cu",
     "flags": [],
@@ -196,5 +202,188 @@
       "-lcublas"
     ],
     "openmp": false
+  },
+  {
+    "name": "hw1_hello_solution",
+    "source": "exercises/hw1/hello_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw1_hello"
+  },
+  {
+    "name": "hw1_matrix_mul_solution",
+    "source": "exercises/hw1/matrix_mul_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw1_matrix_mul"
+  },
+  {
+    "name": "hw1_vector_add_solution",
+    "source": "exercises/hw1/vector_add_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw1_vector_add"
+  },
+  {
+    "name": "hw10_serial_solution",
+    "source": "exercises/hw10/streams_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw10_serial"
+  },
+  {
+    "name": "hw10_streams_solution",
+    "source": "exercises/hw10/streams_solution.cu",
+    "flags": [
+      "-DUSE_STREAMS"
+    ],
+    "openmp": false,
+    "variant_of": "hw10_streams"
+  },
+  {
+    "name": "hw10_openmp_solution",
+    "source": "exercises/hw10/streams_solution.cu",
+    "flags": [
+      "-DUSE_STREAMS"
+    ],
+    "openmp": true,
+    "variant_of": "hw10_openmp"
+  },
+  {
+    "name": "hw12_matrix_solution",
+    "source": "exercises/hw12/task1_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw12_matrix"
+  },
+  {
+    "name": "hw12_transform_solution",
+    "source": "exercises/hw12/task2_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw12_transform"
+  },
+  {
+    "name": "hw13_axpy_cublas_from_scratch_solution",
+    "source": "exercises/hw13/Solutions/axpy_cublas_solution.cu",
+    "flags": [
+      "-lcublas"
+    ],
+    "openmp": false,
+    "variant_of": "hw13_axpy_cublas_from_scratch"
+  },
+  {
+    "name": "hw13_axpy_stream_capture_from_scratch_solution",
+    "source": "exercises/hw13/Solutions/axpy_stream_capture_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw13_axpy_stream_capture_from_scratch"
+  },
+  {
+    "name": "hw2_matrix_mul_shared_solution",
+    "source": "exercises/hw2/matrix_mul_shared_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw2_matrix_mul_shared"
+  },
+  {
+    "name": "hw2_stencil_solution",
+    "source": "exercises/hw2/stencil_1d_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw2_stencil"
+  },
+  {
+    "name": "hw3_vector_add_solution",
+    "source": "exercises/hw3/vector_add_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw3_vector_add"
+  },
+  {
+    "name": "hw4_matrix_sums_solution",
+    "source": "exercises/hw4/matrix_sums_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw4_matrix_sums"
+  },
+  {
+    "name": "hw5_matrix_sums_solution",
+    "source": "exercises/hw5/matrix_sums_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw5_matrix_sums"
+  },
+  {
+    "name": "hw5_max_reduction_solution",
+    "source": "exercises/hw5/max_reduction_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw5_max_reduction"
+  },
+  {
+    "name": "hw6_array_inc_solution",
+    "source": "exercises/hw6/array_inc_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw6_array_inc"
+  },
+  {
+    "name": "hw6_linked_list_solution",
+    "source": "exercises/hw6/linked_list_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw6_linked_list"
+  },
+  {
+    "name": "hw7_multi_solution",
+    "source": "exercises/hw7/multi_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw7_multi"
+  },
+  {
+    "name": "hw7_overlap_solution",
+    "source": "exercises/hw7/overlap_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw7_overlap"
+  },
+  {
+    "name": "hw8_task1_solution",
+    "source": "exercises/hw8/task1/task1_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw8_task1"
+  },
+  {
+    "name": "hw8_task2_solution",
+    "source": "exercises/hw8/task2/task2_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw8_task2"
+  },
+  {
+    "name": "hw8_task3_solution",
+    "source": "exercises/hw8/task3/task3_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw8_task3"
+  },
+  {
+    "name": "hw9_groups_solution",
+    "source": "exercises/hw9/task1_solution.cu",
+    "flags": [],
+    "openmp": false,
+    "variant_of": "hw9_groups"
+  },
+  {
+    "name": "hw9_compaction_solution",
+    "source": "exercises/hw9/task2_solution.cu",
+    "flags": [
+      "-rdc=true"
+    ],
+    "openmp": false,
+    "variant_of": "hw9_compaction"
   }
 ]

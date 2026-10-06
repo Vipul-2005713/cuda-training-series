@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../hw1/cuda_helpers.cuh"
 template<class Launch>
 int matrix_sums_main(int argc, char** argv, const std::vector<const char*>& names, Launch launch) {

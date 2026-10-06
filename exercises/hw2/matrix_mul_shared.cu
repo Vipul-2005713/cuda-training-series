@@ -1,4 +1,4 @@
-﻿#include "../hw1/matrix_driver.cuh"
+#include "../hw1/matrix_driver.cuh"
 constexpr int TILE = 16;
 __global__ void mmul_shared(const float* a, const float* b, float* c, int n) {
     __shared__ float as[TILE][TILE], bs[TILE][TILE];

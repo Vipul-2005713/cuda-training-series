@@ -1,4 +1,4 @@
-﻿#include "../hw4/matrix_sums_kernels.cuh"
+#include "../hw4/matrix_sums_kernels.cuh"
 #include "../hw4/matrix_sums_driver.cuh"
 constexpr int BLOCK_SIZE = 256;
 // One block per row gives coalesced loads and many more independent workers.

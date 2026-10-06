@@ -1,3 +1,5 @@
+> Historical report from the earlier Windows environment. These measurements are not Ubuntu/WSL results. Use [readme.md](readme.md) for current Ubuntu commands and expected behavior; fresh logs go to `results/ubuntu/`.
+
 ﻿# Homework 1 — CUDA execution, vector addition, and matrix multiplication
 
 The completed programs are [hello.cu](hello.cu), [vector_add.cu](vector_add.cu), and [matrix_mul.cu](matrix_mul.cu). The original assignment remains in [readme.md](readme.md); the supplied `*_solution.cu` files are preserved as historical reference.

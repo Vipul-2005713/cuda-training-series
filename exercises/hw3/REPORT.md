@@ -1,3 +1,5 @@
+> Historical report from the earlier Windows environment. These measurements are not Ubuntu/WSL results. Use [readme.md](readme.md) for current Ubuntu commands and expected behavior; fresh logs go to `results/ubuntu/`.
+
 ﻿# Homework 3 — grid-stride loops and launch-size experiments
 
 Completed source: [vector_add.cu](vector_add.cu). Assignment: [readme.md](readme.md).

@@ -1,79 +1,57 @@
-# Homework 6
+# HW6: Unified memory and explicit copies
 
-These exercises will have you use Unified Memory to utilize GPUs on non-trivial data structures.
+`linked_list.cu` allocates every list node in managed memory so CPU and GPU can
+follow the same pointers. `array_inc.cu` compares explicit transfers, managed
+memory, and prefetch when the device supports it.
 
-## **1. Porting Linked Lists to GPUs**
+## Build and run on Ubuntu / WSL2
 
-For your first task, you are given a code that assembles a linked list on the CPU, and then attempts to print an element from the list. Your task is to modify the code using UM techniques, so that the linked list can be correctly traversed either from CPU code or from GPU code. Hint: there is only one line in the file that needs to be modified to do this exercise.
+Use an **Ubuntu Bash terminal**, with the Linux CUDA Toolkit, `g++`, and Python 3
+available. Run all commands below from the **repository root** (`cuda-training-series`),
+not this homework directory. See the [main setup guide](../../README.md) first.
 
-Compile it using the following:
-
-```
-module load cuda
-nvcc -o linked_list linked_list.cu
-```
-
-The module load command selects a CUDA compiler for your use. The module load command only needs to be done once per session/login. *nvcc* is the CUDA compiler invocation command. The syntax is generally similar to gcc/g++.
-
-To run your code, we will use an LSF command:
-
-```
-bsub -W 10 -nnodes 1 -P <allocation_ID> -Is jsrun -n1 -a1 -c1 -g1 ./linked_list
+```bash
+source tools/ubuntu_env.sh
+python3 tools/run_exercises.py --build --hw 6 --suite default
 ```
 
-Alternatively, you may want to create an alias for your bsub command in order to make subsequent runs easier:
+This builds the homework's programs into `build/ubuntu/` and runs their default
+checks. To run the individual programs or change problem sizes after building:
 
-```
-alias lsfrun='bsub -W 10 -nnodes 1 -P <allocation_ID> -Is jsrun -n1 -a1 -c1 -g1'
-lsfrun ./linked_list
-```
-
-To run your code at NERSC on Cori, we can use Slurm:
-
-```
-module load esslurm
-srun -C gpu -N 1 -n 1 -t 10 -A m3502 --gres=gpu:1 -c 10 ./linked_list
+```bash
+./build/ubuntu/hw6_linked_list
+./build/ubuntu/hw6_array_inc --n 4194304 --iterations 1 --mode all
+./build/ubuntu/hw6_array_inc --n 1003 --iterations 3 --mode explicit
+./build/ubuntu/hw6_array_inc --n 262144 --iterations 10000 --mode managed
 ```
 
-Allocation `m3502` is a custom allocation set up on Cori for this training series, and should be available to participants who registered in advance. If you cannot submit using this allocation, but already have access to another allocation that grants access to the Cori GPU nodes (such as m1759), you may use that instead.
+## What to expect
 
-If you prefer, you can instead reserve a GPU in an interactive session, and then run an executable any number of times while the Slurm allocation is active (this is recommended if there are enough available nodes):
+- The linked-list program prints `key = 3` twice and `PASS linked_list: all 5 CPU/GPU keys match`.
+- Array increment checks that every element equals the iteration count and prints `PASS mode=...` with kernel and host timing.
+- Options: `--n` (default 4194304), `--iterations` (default 1), and `--mode all|explicit|managed|prefetch` (default `all`).
+- On the checked RTX 3050 under WSL, `managedMemory=1` and `concurrentManagedAccess=0`: explicit and managed modes run, while prefetch prints `SKIP mode=prefetch`. The runner reports `PASS_WITH_SKIPS`.
+- CPU reads happen after GPU synchronization. Do not infer full demand-paged unified-memory support from successful basic managed allocation. See [NVIDIA's WSL limitations](https://docs.nvidia.com/cuda/wsl-user-guide/index.html#known-limitations-for-linux-cuda-applications).
 
-```
-salloc -C gpu -N 1 -t 60 -A m3502 --gres=gpu:1 -c 10
-srun -n 1 ./linked_list
-```
+## Check the complete homework
 
-Note that you only need to `module load esslurm` once per login session; this is what enables you to submit to the Cori GPU nodes.
-
-Correct output should look like this:
-
-```
-key = 3
-key = 3
+```bash
+python3 tools/run_exercises.py --hw 6 --suite all
 ```
 
-If you need help, refer to *linked_list_solution.cu*
+This runs the default, boundary, and any additional experiments defined for HW6.
+Add `--build` after changing code. Add `--include-solutions --build` to check the
+reference entry points too; they share the completed exercise implementations.
+The runner reports `PASS`, `PASS_WITH_SKIPS`, or `FAIL`, and returns nonzero on
+build errors, timeouts, or failed checks. Kernel timings vary with hardware and
+system load; use correctness messages to judge success.
 
+Detailed output is in `results/ubuntu/runs/`, compiler output is in
+`results/ubuntu/build/`, and the latest invocation has `summary.json` and
+`summary.csv`. Use `--output results/ubuntu/hw6` to keep this homework's logs
+separate. For a different GPU, pass `--arch sm_XX`; the default `sm_86` matches
+the RTX 3050. For compiler selection, use `--ccbin g++-12` when needed.
 
-## **2. Array Increment**
-
-In this exercise, you are given a code that increments a large array on the GPU.
-
- a. First, compile and profile the code as-is:
-
-   ```
-   module load nsight-systems
-   nvcc -o array_inc array_inc.cu
-   lsfrun nsys profile --stats=true ./array_inc
-   ```
- 
-   Make a note of the kernel execution duration.
-   
- b. Now, modify the code to use managed memory. Replace the malloc operations with cudaMallocManaged, and eliminate the cudaMemcpy operations.  Do you need to replace the *cudaMemcpy* operation from device to host with a *cudaDeviceSynchronize()*? Why? Now, compile and profile the code again. Compare the kernel execution duration to the previous result. Note the profiler indication of CPU and GPU page faults.
-
- c. Now, modify the code to insert prefetching of the array to the GPU immediately before the kernel call, and back to the CPU immediately after the kernel call. Compile and profile the code again. Compare the kernel execution time to the previous results. Are there still any page faults? Why?
- 
- d. Bonus: Modify the code to run the *inc()* kernel 10000 times in a row instead of just once. What can be said about the impact of memory operations on our runtime? What would this suggest for a real-world application?
-
-If you need help, refer to the *array_inc_solution.cu*.
+The [original lecture assignment](LESSON.md) is preserved for background. Its
+cluster commands, FIXME locations, and historical timings do not describe the
+current completed Ubuntu programs.

@@ -1,4 +1,4 @@
-﻿#include "../hw1/cuda_helpers.cuh"
+#include "../hw1/cuda_helpers.cuh"
 __global__ void vadd(const float* a, const float* b, float* c, int n) {
     for (int i = blockIdx.x * blockDim.x + threadIdx.x; i < n; i += gridDim.x * blockDim.x)
         c[i] = a[i] + b[i];

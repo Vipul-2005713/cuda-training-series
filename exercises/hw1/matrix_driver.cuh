@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "cuda_helpers.cuh"
 
 // Nonuniform integer inputs detect swapped indices. A[r,k]=ar[r]+ak[k],

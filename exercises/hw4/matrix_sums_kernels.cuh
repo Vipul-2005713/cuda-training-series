@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "../hw1/cuda_helpers.cuh"
 // Adjacent lanes visit DIFFERENT rows: their same-instruction loads are strided.
 __global__ void row_sums(const float* a, float* sums, int n) {

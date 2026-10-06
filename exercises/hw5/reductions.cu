@@ -1,4 +1,4 @@
-﻿#include "../hw1/cuda_helpers.cuh"
+#include "../hw1/cuda_helpers.cuh"
 constexpr int BLOCK_SIZE = 256;
 constexpr int BLOCKS = 640;
 // One global atomic for every input: the destination becomes a serialization point.

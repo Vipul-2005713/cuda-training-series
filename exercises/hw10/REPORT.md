@@ -1,3 +1,5 @@
+> Historical report from the earlier Windows environment. These measurements are not Ubuntu/WSL results. Use [readme.md](readme.md) for current Ubuntu commands and expected behavior; fresh logs go to `results/ubuntu/`.
+
 ﻿# Homework 10: streams, OpenMP, and multiple GPUs
 
 `streams.cu` completes all three tasks. It uses the original 22-sample Gaussian calculation, a fully checked serial GPU baseline, pinned host memory, asynchronous chunk processing, optional OpenMP, and device-aware stream ownership. Historical `streams_solution.cu` is retained as a reference; build the repaired starter for the validated implementation.

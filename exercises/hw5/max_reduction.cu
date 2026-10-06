@@ -1,4 +1,4 @@
-﻿#include "../hw1/cuda_helpers.cuh"
+#include "../hw1/cuda_helpers.cuh"
 #include <math_constants.h>
 constexpr int BLOCK_SIZE = 256;
 constexpr int BLOCKS = 640;

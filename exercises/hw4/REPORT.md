@@ -1,3 +1,5 @@
+> Historical report from the earlier Windows environment. These measurements are not Ubuntu/WSL results. Use [readme.md](readme.md) for current Ubuntu commands and expected behavior; fresh logs go to `results/ubuntu/`.
+
 ﻿# Homework 4 — row/column sums and memory coalescing
 
 Completed source: [matrix_sums.cu](matrix_sums.cu), with kernels in [matrix_sums_kernels.cuh](matrix_sums_kernels.cuh). Assignment: [readme.md](readme.md).

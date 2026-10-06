@@ -1,0 +1,9 @@
+* text=auto
+*.cu text eol=lf
+*.cuh text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+**/build_nvcc text eol=lf
+**/profile text eol=lf

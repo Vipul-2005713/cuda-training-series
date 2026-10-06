@@ -1,63 +1,57 @@
-# Homework 2
+# HW2: Shared memory: stencil and tiled matrix multiplication
 
-These exercises will help reinforce the concept of Shared Memory on the GPU.
+`stencil_1d.cu` sums a radius-3 neighborhood using shared memory and halo cells.
+`matrix_mul_shared.cu` multiplies matrices with 16×16 shared-memory tiles.
+Compare its kernel time with HW1 using the same matrix side and repeat count.
 
-## **1. 1D Stencil Using Shared Memory**
+## Build and run on Ubuntu / WSL2
 
-Your first task is to create a 1D stencil application that uses shared memory. The code skeleton is provided in *stencil_1d.cu*. Edit that file, paying attention to the FIXME locations. The code will verify output and report any errors.
+Use an **Ubuntu Bash terminal**, with the Linux CUDA Toolkit, `g++`, and Python 3
+available. Run all commands below from the **repository root** (`cuda-training-series`),
+not this homework directory. See the [main setup guide](../../README.md) first.
 
-After editing the code, compile it using the following:
-
-```
-module load cuda
-nvcc -o stencil_1d stencil_1d.cu
-```
-
-The module load command selects a CUDA compiler for your use. The module load command only needs to be done once per session/login. *nvcc* is the CUDA compiler invocation command. The syntax is generally similar to gcc/g++.
-
-To run your code, we will use an LSF command:
-
-```
-bsub -W 10 -nnodes 1 -P <allocation_ID> -Is jsrun -n1 -a1 -c1 -g1 ./stencil_1d
+```bash
+source tools/ubuntu_env.sh
+python3 tools/run_exercises.py --build --hw 2 --suite default
 ```
 
-Alternatively, you may want to create an alias for your *bsub* command in order to make subsequent runs easier:
+This builds the homework's programs into `build/ubuntu/` and runs their default
+checks. To run the individual programs or change problem sizes after building:
 
-```
-alias lsfrun='bsub -W 10 -nnodes 1 -P <allocation_ID> -Is jsrun -n1 -a1 -c1 -g1'
-lsfrun ./stencil_1d
-```
-
-To run your code at NERSC on Cori, we can use Slurm:
-
-```
-module load esslurm
-srun -C gpu -N 1 -n 1 -t 10 -A m3502 --reservation cuda_training --gres=gpu:1 -c 10 ./stencil_1d
+```bash
+./build/ubuntu/hw2_stencil 1048576 20
+./build/ubuntu/hw2_stencil 4099 5
+./build/ubuntu/hw2_stencil 1 5
+./build/ubuntu/hw2_matrix_mul_shared 512 10
+./build/ubuntu/hw2_matrix_mul_shared 65 5
 ```
 
-Allocation `m3502` is a custom allocation set up on Cori for this training series, and should be available to participants who registered in advance. If you cannot submit using this allocation, but already have access to another allocation that grants access to the Cori GPU nodes (such as m1759), you may use that instead.
+## What to expect
 
-If you prefer, you can instead reserve a GPU in an interactive session, and then run an executable any number of times while the Slurm allocation is active (this is recommended if there are enough available nodes):
+- The stencil prints `PASS stencil_1d` after checking the interior and halos. The 1-element and 4099-element cases exercise boundary handling.
+- Matrix multiplication prints `PASS matrix_mul_shared`, kernel time, GFLOP/s, and the number of outputs checked. Side 65 exercises partial tiles.
+- Stencil arguments: `[interior_elements=1048576] [repeats=20]`. Matrix arguments: `[side=512] [repeats=10]`.
+- Shared-memory reuse can reduce global-memory traffic. Compare measured timings; a fixed speedup is not a correctness requirement.
 
-```
-salloc -C gpu -N 1 -t 60 -A m3502 --reservation cuda_training --gres=gpu:1 -c 10
-srun -n 1 ./stencil_1d
-```
+## Check the complete homework
 
-Note that you only need to `module load esslurm` once per login session; this is what enables you to submit to the Cori GPU nodes.
-
-If you have trouble, you can look at *stencil_1d_solution* for a complete example.
-
-## **2. 2D Matrix Multiply Using Shared Memory**
-
-Next, let's apply shared memory to the 2D matrix multiply we wrote in Homework 1. FIXME locations are provided in the code skeleton in *matrix_mul_shared.cu*. See if you can successfully load the required data into shared memory and then appropriately update the dot product calculation. Compile and run your code using the following:
-
-```
-module load cuda
-nvcc -o matrix_mul matrix_mul_shared.cu
-lsfrun ./matrix_mul
+```bash
+python3 tools/run_exercises.py --hw 2 --suite all
 ```
 
-Note that timing information is included. Go back and run your solution from Homework 1 and observe the runtime. What runtime impact do you notice after applying shared memory to this 2D matrix multiply? How does it differ from the runtime you observed in your previous implementation?
+This runs the default, boundary, and any additional experiments defined for HW2.
+Add `--build` after changing code. Add `--include-solutions --build` to check the
+reference entry points too; they share the completed exercise implementations.
+The runner reports `PASS`, `PASS_WITH_SKIPS`, or `FAIL`, and returns nonzero on
+build errors, timeouts, or failed checks. Kernel timings vary with hardware and
+system load; use correctness messages to judge success.
 
-If you have trouble, you can look at *matrix_mul_shared_solution* for a complete example.
+Detailed output is in `results/ubuntu/runs/`, compiler output is in
+`results/ubuntu/build/`, and the latest invocation has `summary.json` and
+`summary.csv`. Use `--output results/ubuntu/hw2` to keep this homework's logs
+separate. For a different GPU, pass `--arch sm_XX`; the default `sm_86` matches
+the RTX 3050. For compiler selection, use `--ccbin g++-12` when needed.
+
+The [original lecture assignment](LESSON.md) is preserved for background. Its
+cluster commands, FIXME locations, and historical timings do not describe the
+current completed Ubuntu programs.

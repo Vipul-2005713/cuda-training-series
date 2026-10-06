@@ -1,114 +1,58 @@
-## **1. Streams Review**
+# HW10: CPU threads, CUDA streams, and device selection
 
-For your first task, you are given a code that performs a silly computation element-wise on a vector. We already implemented a chunked version of this code using multiple CUDA streams in Homework 7. Let's start by reviewing the performance impact that CUDA streams had on this code.
+The runner builds `streams.cu` three ways: serial; `-DUSE_STREAMS`; and
+`-DUSE_STREAMS -Xcompiler -fopenmp`. This compares serial submission, one CPU
+thread feeding streams, and OpenMP threads feeding streams. No MPI is needed.
 
-Compile it using the following:
+## Build and run on Ubuntu / WSL2
 
-```
-module load cuda/11.4.0
-nvcc -o streams streams.cu -DUSE_STREAMS
-```
+Use an **Ubuntu Bash terminal**, with the Linux CUDA Toolkit, `g++`, and Python 3
+available. Run all commands below from the **repository root** (`cuda-training-series`),
+not this homework directory. See the [main setup guide](../../README.md) first.
 
-The module load command selects a CUDA compiler for your use. The module load command only needs to be done once per session/login. *nvcc* is the CUDA compiler invocation command. The syntax is generally similar to gcc/g++.
-
-To run your code, we will use an LSF command:
-
-```
-bsub -W 10 -nnodes 1 -P <allocation_ID> -Is jsrun -n1 -a1 -c1 -g1 ./streams
+```bash
+source tools/ubuntu_env.sh
+python3 tools/run_exercises.py --build --hw 10 --suite default
 ```
 
-Alternatively, you may want to create an alias for your bsub command in order to make subsequent runs easier:
+This builds the homework's programs into `build/ubuntu/` and runs their default
+checks. To run the individual programs or change problem sizes after building:
 
-```
-alias lsfrun='bsub -W 10 -nnodes 1 -P <allocation_ID> -Is jsrun -n1 -a1 -c1 -g1'
-lsfrun ./streams
-```
-
-To build your code on NERSC's Cori-GPU
-
-```
-module load cgpu cuda/11.4.0
-nvcc -o streams streams.cu -DUSE_STREAMS
+```bash
+./build/ubuntu/hw10_serial 1048576 16 4 1
+./build/ubuntu/hw10_streams 1048576 16 4 1
+./build/ubuntu/hw10_openmp 1048576 16 4 1
+./build/ubuntu/hw10_openmp 1003 7 3 1
+./build/ubuntu/hw10_openmp 1048577 17 4 4
 ```
 
-To run during the node reservation (10:30-12:30 Pacific time on July 16):
-```
-module load cgpu cuda/11.4.0
-srun -C gpu -N 1 -n 1 -t 10 -A ntrain --reservation=cuda_training -q shared -G 1 -c 8 ./streams
-```
+## What to expect
 
-or grab a GPU node first, then run interactively:
-```
-module load cgpu cuda 
-salloc -C gpu -N 1 -t 60 -A ntrain --reservation=cuda_training -q shared -G 1 -c 8
-srun -n 1 ./streams
-```
+- Each executable prints `PASS: all ... elements checked` after comparing with a CPU reference.
+- Stream variants also print streamed time and speedup. The OpenMP build prints `OpenMP=enabled`; the single-thread stream build prints `OpenMP=disabled`.
+- Arguments: `[N=1048576] [chunks=16] [streams_per_GPU=4] [requested_GPUs=1]`.
+- Asking for four GPUs on this laptop prints `MULTI_GPU_LIMITATION` and `used_gpus=1`, then checks the available-device path. This does not measure four-GPU performance.
+- Compare equal workloads. More CPU threads can add overhead and need not improve a small submission workload.
 
-To run outside of the node reservation window:
-Same steps as above, but do not include "--reservation=cuda_training -q shared" in the srun or salloc commands.
+## Check the complete homework
 
-In this case, the output will show the elapsed time of the non-overlapped version of the code compared to the overlapped version of the code. The non-overlapped version of the code copies the entire vector to the device, then launches the processing kernel, then copies the entire vector back to the host. In the overlapped version, the vector is broken up into chunks, and then each chunk is copied and processed asynchronously on the GPU using CUDA streams.
-
-You can also run this code with Nsight Systems if you wish to observe the overlapping behavior:
-
-On Summit:
-```
-module load nsight-systems
-lsfrun nsys profile -o <destination_dir>/streams.qdrep ./streams
+```bash
+python3 tools/run_exercises.py --hw 10 --suite all
 ```
 
-On Cori:
-```
-module load nsight-systems
-srun -n 1 nsys profile -o <destination_dir>/streams.qdrep ./streams
-```
+This runs the default, boundary, and any additional experiments defined for HW10.
+Add `--build` after changing code. Add `--include-solutions --build` to check the
+reference entry points too; they share the completed exercise implementations.
+The runner reports `PASS`, `PASS_WITH_SKIPS`, or `FAIL`, and returns nonzero on
+build errors, timeouts, or failed checks. Kernel timings vary with hardware and
+system load; use correctness messages to judge success.
 
-Note that you will have to copy this file over to your local machine and install Nsight Systems for visualization. You can download Nsight Systems here:
-https://developer.nvidia.com/nsight-systems
+Detailed output is in `results/ubuntu/runs/`, compiler output is in
+`results/ubuntu/build/`, and the latest invocation has `summary.json` and
+`summary.csv`. Use `--output results/ubuntu/hw10` to keep this homework's logs
+separate. For a different GPU, pass `--arch sm_XX`; the default `sm_86` matches
+the RTX 3050. For compiler selection, use `--ccbin g++-12` when needed.
 
-This visual output should show you the sequence of operations (*cudaMemcpy* Host to Device, kernel call, and *cudaMemcpy* Device To Host).
-When you run the code, there will be a verification check performed, to make sure you have processed the entire vector correctly, in chunks. If you pass the verification test, the program will display the elapsed time of the streamed version. The overlapped version of the code should be about 2X faster (i.e. half the duration) of the non-streamed version. If you profiled the code using Nsight Systems, you should be able to confirm that there is indeed overlap of operations by zooming in on the portion of execution related to kernel launches. You can see the non-overlapped version run, followed by the overlapped version. Not only should the overlapped version be faster, you should see an interleaving of computation and data transfer operations.
-
-## **2. OpenMP + CUDA Streams**
-
-For this particular application, launching kernels asynchronously from a single CPU thread is sufficient. However, for legacy HPC applications that use OpenMP for on-node shared memory processing, that may not be the case. Many of these applications utilize MPI for distributing work across nodes, and they use OpenMP for better on-node shared memory processing. However, each OpenMP thread may still have quite a bit of work that can benefit from GPU acceleration, albeit not enough work to saturate the GPU on its own. In cases like this, we can combine OpenMP threads with CUDA streams to make sure our GPU is fully utilized.
-
-In order to simulate this behavior, your task is to distribute the processing of this code's vector chunks across OpenMP threads. If done correctly, each thread will submit work to the GPU asynchronously using the CUDA streams decomposition that is already present in the code. Note that this will have no performance impact on this particular sample code. The objective is to show that we can combine CPU thread parallelism with CUDA streams in order to achieve concurrent execution on one or more GPUs.
-
-Once you have inserted your OpenMP statement(s), compile and run using the following instructions.
-
-On Summit:
-```
-nvcc -Xcompiler -fopenmp -o streams streams.cu -DUSE_STREAMS
-export OMP_NUM_THREADS=8
-jsrun -n1 -a1 -c8 -bpacked:8 -g1 ./streams
-```
-
-On Cori:
-```
-nvcc -Xcompiler -fopenmp -o streams streams.cu -DUSE_STREAMS
-export OMP_NUM_THREADS=8
-srun -C gpu -N 1 -n 1 -t 10 -A ntrain --reservation=cuda_training -q shared -G 1 -c 8 ./streams
-```
-
-What does the performance look like compared to exercise 1? It should look pretty similar. How about when you profile the code? Unfortunately, the profiler currently requires some serialization when profiling across CPU threads, so you should actually see slower performance compared to the non-overlapped version. This should be reflected in the resulting qdrep file. Notice that we don't observe nearly as much concurrent execution on the GPU. This is something we are working on, and future versions of the profiler suffer from this limitation.
-
-If you need help, refer to *streams_solution.cu*.
-
-## **3. Bonus Task - Multi-GPU**
-
-Remember that a CUDA stream is tied to a particular GPU. How can we combine CPU threading with more than a single GPU? If you're feeling adventurous, try adapting this homework's code to submit work to 4 GPUs, instead of just one. Note that this will require keeping track of which CUDA stream was bound to which GPU when it was created. Feel free to increase the problem size in order to ensure that there is enough work to observe a performance impact. Compile and run your code using the following instructions. 
-
-On Summit:
-```
-nvcc -Xcompiler -fopenmp -o streams streams.cu -DUSE_STREAMS
-export OMP_NUM_THREADS=8
-jsrun -n1 -a1 -c8 -bpacked:8 -g4 ./streams
-```
-
-On Cori:
-```
-nvcc -Xcompiler -fopenmp -o streams streams.cu -DUSE_STREAMS
-export OMP_NUM_THREADS=8
-srun -C gpu -N 1 -n 1 -t 10 -A ntrain --reservation=cuda_training -q shared -G 4 -c 8 ./streams
-```
+The [original lecture assignment](LESSON.md) is preserved for background. Its
+cluster commands, FIXME locations, and historical timings do not describe the
+current completed Ubuntu programs.
